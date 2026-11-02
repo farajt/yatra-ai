@@ -1,0 +1,23 @@
+# Core agent framework
+langgraph>=1.0
+langgraph-checkpoint-postgres>=2.0
+langchain-core>=1.0
+langchain-groq>=1.0
+
+# Database
+psycopg[binary]>=3.2
+psycopg-pool>=3.2
+
+# Config + typing
+pydantic>=2.7
+pydantic-settings>=2.3
+
+# HTTP with caching + retries
+requests>=2.32
+requests-cache>=1.2
+
+# UI
+streamlit>=1.40
+
+# Dev
+pytest>=8.0

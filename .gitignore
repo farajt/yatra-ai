@@ -1,0 +1,22 @@
+# Secrets
+.env
+
+# Virtual environments
+.venv/
+venv/
+langgraph_env*/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local data
+.cache/
+travel_plans/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

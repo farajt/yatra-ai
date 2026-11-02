@@ -1,0 +1,9 @@
+[project]
+name = "yatra-ai"
+version = "0.1.0"
+description = "India-first, constraint-aware multi-agent travel planner built with LangGraph"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
