@@ -1,8 +1,10 @@
 """Plan a trip from the terminal, with live agent progress and follow-up questions.
 
     python -m scripts.plan "7 days in Tokyo from Pune starting 10 Dec, 2 adults, under 3L, vegetarian"
-    python -m scripts.plan                      # asks for the trip interactively
-    python -m scripts.plan -v "..."             # show detailed logs
+    python -m scripts.plan --user faraj "Goa for 4 days from 20 Dec"   # remembers your preferences
+    python -m scripts.plan --user faraj --show-profile                 # what is remembered
+    python -m scripts.plan --user faraj --forget                       # erase it
+    python -m scripts.plan -v "..."                                    # detailed logs
 """
 import argparse
 import logging
@@ -10,7 +12,6 @@ import re
 import sys
 import time
 from datetime import datetime
-from pathlib import Path
 from uuid import uuid4
 
 from langgraph.types import Command
@@ -25,6 +26,9 @@ def main() -> int:
     sys.stdout.reconfigure(encoding="utf-8")  # rupee sign etc. on Windows consoles
     parser = argparse.ArgumentParser(description="Yatra AI trip planner")
     parser.add_argument("query", nargs="?", help="trip description in plain English")
+    parser.add_argument("-u", "--user", default="guest", help="user id for remembered preferences")
+    parser.add_argument("--show-profile", action="store_true", help="print saved preferences and exit")
+    parser.add_argument("--forget", action="store_true", help="delete saved preferences and exit")
     parser.add_argument("-v", "--verbose", action="store_true", help="show detailed logs")
     args = parser.parse_args()
 
@@ -32,10 +36,26 @@ def main() -> int:
     if not args.verbose:
         logging.getLogger("yatra").setLevel(logging.ERROR)
 
-    from yatra.db import close_db
+    from yatra.db import close_db, get_store
     from yatra.graph import get_app
     from yatra.graph.events import NODE_LABELS, describe_update
+    from yatra.graph.memory import forget_profile, get_profile
     from yatra.report import render_report
+
+    if args.show_profile or args.forget:
+        try:
+            store = get_store()
+            if args.forget:
+                forget_profile(store, args.user)
+                print(f"Forgot all saved preferences for '{args.user}'.")
+            else:
+                profile = get_profile(store, args.user)
+                print(f"Saved preferences for '{args.user}':")
+                print("  (none yet)" if profile.is_empty() else
+                      "\n".join(f"  {k}: {v}" for k, v in profile.model_dump(mode="json").items()))
+        finally:
+            close_db()
+        return 0
 
     query = args.query or input("Describe your trip: ").strip()
     if not query:
@@ -45,9 +65,9 @@ def main() -> int:
     app = get_app()
     thread_id = f"trip-{uuid4().hex[:10]}"   # one planning session = one thread
     config = {"configurable": {"thread_id": thread_id}}
-    payload: dict | Command = {"user_query": query}
+    payload: dict | Command = {"user_query": query, "user_id": args.user}
     started = time.perf_counter()
-    print(f"\nPlanning (session {thread_id})\n")
+    print(f"\nPlanning for '{args.user}' (session {thread_id})\n")
 
     try:
         while True:

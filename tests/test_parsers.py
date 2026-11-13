@@ -120,3 +120,13 @@ def test_sanitize_removes_injection_and_truncates():
 def test_format_for_llm_wraps_untrusted_content():
     out = format_for_llm([WebResult(title="T", url="https://a.b", snippet="s")])
     assert out.startswith("<search_results>") and "untrusted" in out
+
+
+def test_geocode_extent_distinguishes_city_and_island():
+    from yatra.tools.geo import parse_geocode
+    seminyak = parse_geocode("Seminyak", {"lat": "-8.69", "lon": "115.17",
+                                          "boundingbox": ["-8.70", "-8.67", "115.15", "115.18"]})
+    bali = parse_geocode("Bali", {"lat": "-8.34", "lon": "115.09", "address": {"country_code": "id"},
+                                  "boundingbox": ["-8.85", "-8.06", "114.43", "115.71"]})
+    assert not seminyak.is_region and seminyak.extent_km < 10
+    assert bali.is_region and bali.country_code == "ID"

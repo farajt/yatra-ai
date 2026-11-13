@@ -1,4 +1,4 @@
-"""PostgreSQL connection pool + LangGraph checkpointer.
+"""PostgreSQL connection pool + LangGraph checkpointer (short-term) and store (long-term).
 
 Replaces the old single global psycopg connection, which:
   * crashed the app at import time if Postgres was down
@@ -8,6 +8,7 @@ import logging
 from functools import lru_cache
 
 from langgraph.checkpoint.postgres import PostgresSaver
+from langgraph.store.postgres import PostgresStore
 from psycopg_pool import ConnectionPool, PoolTimeout
 
 from yatra.config import get_settings
@@ -51,6 +52,14 @@ def get_checkpointer() -> PostgresSaver:
     return checkpointer
 
 
+@lru_cache
+def get_store() -> PostgresStore:
+    """Long-term memory: user profiles that persist across planning sessions."""
+    store = PostgresStore(get_pool())
+    store.setup()  # idempotent
+    return store
+
+
 def check_db() -> None:
     """Raise if the database is unreachable."""
     with get_pool().connection() as conn:
@@ -62,3 +71,4 @@ def close_db() -> None:
         get_pool().close()
         get_pool.cache_clear()
         get_checkpointer.cache_clear()
+        get_store.cache_clear()

@@ -44,12 +44,27 @@ def geocode(place: str) -> GeoPoint:
     )
     if not data:
         raise ToolError(TOOL, f"place not found: {place!r}")
-    hit = data[0]
+    return parse_geocode(place.strip(), data[0])
+
+
+def parse_geocode(place: str, hit: dict) -> GeoPoint:
+    """Pure function: one Nominatim result -> GeoPoint (with the size of the place)."""
+    from yatra.budget import distance_km  # local import avoids a cycle
+
     code = (hit.get("address") or {}).get("country_code")
+    extent = None
+    box = hit.get("boundingbox")  # [south, north, west, east] as strings
+    if isinstance(box, list) and len(box) == 4:
+        try:
+            south, north, west, east = (float(x) for x in box)
+            extent = round(distance_km(south, west, north, east), 1)
+        except ValueError:
+            extent = None
     return GeoPoint(
-        name=place.strip(),
+        name=place,
         display_name=hit.get("display_name", place),
         latitude=float(hit["lat"]),
         longitude=float(hit["lon"]),
         country_code=code.upper() if code else None,
+        extent_km=extent,
     )

@@ -1,6 +1,6 @@
 """Render a finished graph state as a Markdown trip plan (CLI output, download file, UI)."""
 from yatra.formatting import format_day, format_inr
-from yatra.schemas import BudgetReport, TripRequest
+from yatra.schemas import BudgetReport, Critique, TripRequest
 
 
 def _travellers(req: TripRequest) -> str:
@@ -25,6 +25,23 @@ def _budget_section(b: BudgetReport) -> list[str]:
     return out
 
 
+def _quality_section(critiques: list[Critique]) -> list[str]:
+    out = ["## Quality review", ""]
+    for c in critiques:
+        score = f" · score {c.score}/10" if c.score else ""
+        verdict = "approved" if c.approved else f"rejected, {len(c.blocking)} blocking issue(s) sent back"
+        out.append(f"- **Review {c.round}**{score}: {verdict}")
+        for issue in c.blocking:
+            out.append(f"  - ✗ {issue.message}")
+    final = critiques[-1]
+    if not final.approved:
+        out += ["", "*Revision limit reached; the remaining issues above were not fully resolved.*"]
+    notes = [i for i in final.issues if not i.blocking]
+    if notes:
+        out += ["", "Notes:"] + [f"- {i.message}" for i in notes]
+    return out
+
+
 def render_report(state: dict) -> str:
     req: TripRequest | None = state.get("request")
     errors = state.get("errors") or []
@@ -37,7 +54,8 @@ def render_report(state: dict) -> str:
     lines = [
         f"# {req.destination_city} trip plan",
         "",
-        f"**Route:** {req.origin_city} → {req.destination_city}  ",
+        f"**Route:** {req.origin_city} → {req.destination_city}"
+        + (f" (base: {req.stay_area})" if req.stay_area else "") + "  ",
         f"**Dates:** {format_day(req.start_date)} → {format_day(req.end_date)} ({req.nights} nights)  ",
         f"**Travellers:** {_travellers(req)} · **Style:** {req.style.value}",
     ]
@@ -75,7 +93,7 @@ def render_report(state: dict) -> str:
     brief = state.get("brief")
     if brief:
         lines += ["", "## Destination brief", "", brief.summary]
-        if brief.visa_info:
+        if brief.visa_info and not req.is_domestic:
             lines += ["", f"**Visa ({req.passport_country} passport):** {brief.visa_info.strip()} "
                           "*Always verify on the official embassy / e-visa website before booking.*"]
         if brief.local_tips:
@@ -83,6 +101,9 @@ def render_report(state: dict) -> str:
 
     if state.get("itinerary"):
         lines += ["", "## Itinerary", "", state["itinerary"]]
+
+    if state.get("critiques"):
+        lines += [""] + _quality_section(state["critiques"])
 
     if brief and brief.sources:
         lines += ["", "## Sources", ""] + [f"- {u}" for u in brief.sources]

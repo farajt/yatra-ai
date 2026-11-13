@@ -5,29 +5,38 @@ An India-first, constraint-aware multi-agent travel planner built with LangGraph
 Describe a trip in plain English, for example *"7 days in Japan from Pune starting 10 Dec, 2 adults,
 under ₹3L, vegetarian"*. Yatra AI then:
 
-1. **Parses** the request into a validated, typed `TripRequest` using LLM structured output.
-2. **Asks follow-up questions** when details are missing, by pausing the graph with `interrupt()`.
+1. **Remembers you.** Your home city, dietary needs and travel style are loaded from long-term memory.
+2. **Parses** the request into a validated, typed `TripRequest` using LLM structured output.
+3. **Asks follow-up questions** when details are missing, by pausing the graph with `interrupt()`.
    The pause survives in a PostgreSQL checkpoint and the run resumes exactly where it stopped.
-3. **Runs four specialist agents in parallel:** flights (Google Flights), hotels (Google Hotels),
+4. **Runs four specialist agents in parallel:** flights (Google Flights), hotels (Google Hotels),
    destination research (Tavily), and weather (Open-Meteo).
-4. **Computes the budget deterministically in Python**, picking a flight and a hotel that fit
-   the remaining budget. The LLM never does arithmetic.
-5. **Writes a day-by-day itinerary** that is grounded only in the collected data and adapted to the weather.
+5. **Computes the budget deterministically in Python.** It skips dorms for groups and
+   hotels with too few reviews. The LLM never does arithmetic.
+6. **Writes a day-by-day itinerary** that is grounded only in the collected data.
+7. **Critiques its own plan and re-plans.** A critic checks the plan (rule checks plus an LLM review)
+   and sends blocking problems back: over budget → cheapest options, repeated sights or ignored
+   interests → rewrite with feedback. It makes at most 2 revisions, so the loop always ends.
 
-> **Status:** Phase 1 complete (agentic core and CLI). Next: critic and re-planning loop, plus long-term memory.
+> **Status:** Phase 3 complete (critic loop and long-term memory). Next: FastAPI and the web UI.
 
 ## Architecture
 
 ```
-START -> parse_intent --(missing info)--> clarify --(interrupt / resume)--> parse_intent
-             |       --(3 failed rounds)--> give_up -> END
-             |
-             +--(complete)--> flights_agent  --+
-                              hotels_agent   --+
-                              research_agent --+--> budget -> itinerary -> END
-                              weather_agent  --+
-                 (parallel fan-out)       (fan-in join)
+START -> load_profile -> parse_intent --(missing)--> clarify --(interrupt/resume)--> parse_intent
+                              |
+                              +--> flights | hotels | research | weather   (parallel)
+                                                  |
+                                                  v
+                              budget -> itinerary -> critic --(approved)--> save_profile -> END
+                                ^                       |
+                                +------- replan <-------+  (blocking issues, max 2 revisions)
 ```
+
+| Memory | Mechanism | Key | Holds |
+|---|---|---|---|
+| Short-term | LangGraph checkpointer (Postgres) | `thread_id` | One planning session; makes interrupts resumable |
+| Long-term | LangGraph Store (Postgres) | `user_id` | Stated preferences only: home city, diet, style |
 
 ### Engineering decisions
 
@@ -38,7 +47,10 @@ START -> parse_intent --(missing info)--> clarify --(interrupt / resume)--> pars
 | Checkpoint serializer uses an explicit allowlist | Our types round-trip, and unknown types in a checkpoint are blocked |
 | Web results are sanitised and wrapped as untrusted data | Defence against indirect prompt injection |
 | SQLite response cache on all HTTP calls | Re-runs and evaluations don't spend the free API quotas |
-| One `thread_id` per planning session | Clean state for each trip; long-term memory is keyed by user (Phase 3) |
+| One `thread_id` per planning session | Clean state for each trip; long-term memory is keyed by user |
+| Critic = rules + LLM, only blocking issues loop | Exact checks are free and reliable; the LLM judges quality; a capped loop can't run forever |
+| Over-budget re-plan reuses fetched data | Self-correction costs no extra API quota |
+| Memory saves only what the user stated | No inferred or sensitive guesses persisted; stated-now beats remembered |
 | Model names live in `.env` | Groq retired `llama-3.3-70b-versatile` in Aug 2026, and the swap took one line |
 
 ## Project layout
@@ -51,11 +63,11 @@ yatra/
   prompts.py                           all prompts
   report.py, formatting.py             Markdown report, ₹ formatting (2,00,000)
   tools/                               flights, hotels, web search, geocoding, weather, currency
-  graph/                               state, intent + clarification, agents, synthesis, builder
+  graph/                               state, intent, agents, synthesis, critic loop, memory, builder
 scripts/
   plan.py                              plan a trip from the terminal
   smoke_test.py                        live check of every external dependency
-tests/                                 31 offline tests, including a full graph run with interrupt/resume
+tests/                                 61 offline tests: graph runs with interrupt/resume, critic loop, memory
 ```
 
 ## Setup (Windows PowerShell)
@@ -67,7 +79,8 @@ pip install -r requirements.txt
 copy .env.example .env     # then fill in your keys
 pytest                     # offline tests, no API calls
 python -m scripts.smoke_test --paid
-python -m scripts.plan "7 days in Japan from Pune starting 10 Dec, 2 adults, under 3L, vegetarian"
+python -m scripts.plan --user faraj "7 days in Japan from Pune starting 10 Dec, 2 adults, under 3L, vegetarian"
+python -m scripts.plan --user faraj --show-profile
 ```
 
 Everything runs on free tiers: Groq, SerpApi (250 searches/month), Tavily (1,000 credits/month),

@@ -13,6 +13,8 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.types import interrupt
 from pydantic import BaseModel, Field, ValidationError
 
+from yatra.destinations import base_area_for
+from yatra.graph.memory import apply_profile
 from yatra.llm import invoke_structured
 from yatra.prompts import INTENT_SYSTEM
 from yatra.schemas import TripRequest
@@ -42,6 +44,8 @@ class TripExtraction(BaseModel):
     origin_airport: str | None = Field(None, description="IATA code of the departure city's main airport")
     destination_city: str | None = Field(None, description="Destination city")
     destination_airport: str | None = Field(None, description="IATA code of the destination's main airport")
+    destination_country: str | None = Field(None, description="ISO-2 country code of the destination")
+    stay_area: str | None = Field(None, description="Base town to stay in, for a region/island destination")
     start_date: str | None = Field(None, description="Trip start date, YYYY-MM-DD")
     end_date: str | None = Field(None, description="Trip end/return date, YYYY-MM-DD")
     duration_days: int | None = Field(None, description="Trip length in days, if stated")
@@ -84,7 +88,7 @@ def build_request(
     data = prior.model_dump() if prior else {}
     issues: list[str] = []
 
-    for field in ("origin_city", "destination_city"):
+    for field in ("origin_city", "destination_city", "stay_area"):
         value = (getattr(ext, field) or "").strip()
         if value:
             data[field] = value
@@ -92,6 +96,10 @@ def build_request(
         code = (getattr(ext, field) or "").strip().upper()
         if _IATA.match(code):
             data[field] = code
+
+    country = (ext.destination_country or "").strip().upper()
+    if re.fullmatch(r"[A-Z]{2}", country):
+        data["destination_country"] = country
 
     start, end = _parse_date(ext.start_date), _parse_date(ext.end_date)
     if start:
@@ -144,9 +152,38 @@ def parse_intent(state: dict) -> dict:
         return {"status": "failed", "errors": [f"intent: could not understand the request ({e})"],
                 "llm_calls": 1}
     request, issues = build_request(ext, on_date, state.get("request"))
+
+    # Long-term memory: fill gaps from saved preferences, but never override what was said now.
+    stated = {**(state.get("stated") or {}), **stated_preferences(ext)}
+    notes: list[str] = []
+    if state.get("profile"):
+        request, notes = apply_profile(request, state["profile"], stated)
+    if not request.stay_area:
+        base = base_area_for(request.destination_city)
+        if base:
+            request = request.model_copy(update={"stay_area": base})
+            notes.append(f"Based in {base}, a popular area of {request.destination_city} "
+                         "(name a different area to change it).")
+
     log.info("Parsed request: missing=%s issues=%s", request.missing_fields(), issues)
-    return {"request": request, "issues": issues, "assumptions": ext.assumptions or [],
-            "llm_calls": 1}
+    return {"request": request, "issues": issues, "stated": stated,
+            "assumptions": [*(ext.assumptions or []), *notes], "llm_calls": 1}
+
+
+def stated_preferences(ext: TripExtraction) -> dict:
+    """Preferences the user explicitly stated in this message (candidates for long-term memory)."""
+    out: dict = {}
+    if ext.origin_city and ext.origin_city.strip():
+        out["home_city"] = ext.origin_city.strip()
+        code = (ext.origin_airport or "").strip().upper()
+        if _IATA.match(code):
+            out["home_airport"] = code
+    if ext.style:
+        out["style"] = ext.style
+    dietary = [d.strip().lower() for d in ext.dietary or [] if d.strip()]
+    if dietary:
+        out["dietary"] = dietary
+    return out
 
 
 def clarify(state: dict) -> dict:

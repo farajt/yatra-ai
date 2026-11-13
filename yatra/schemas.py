@@ -26,6 +26,8 @@ class TripRequest(BaseModel):
     origin_airport: str | None = Field(None, description="3-letter IATA code, e.g. 'PNQ'")
     destination_city: str | None = Field(None, description="Main destination city, e.g. 'Tokyo'")
     destination_airport: str | None = Field(None, description="3-letter IATA code, e.g. 'NRT'")
+    destination_country: str | None = Field(None, description="ISO-2 country code, e.g. 'JP'")
+    stay_area: str | None = Field(None, description="Base town for a region destination, e.g. 'Seminyak'")
     start_date: date | None = Field(None, description="Departure date (YYYY-MM-DD)")
     end_date: date | None = Field(None, description="Return date (YYYY-MM-DD)")
     adults: int = Field(1, ge=1, le=9)
@@ -51,6 +53,18 @@ class TripRequest(BaseModel):
         if self.start_date and self.end_date:
             return (self.end_date - self.start_date).days
         return None
+
+    @property
+    def is_domestic(self) -> bool:
+        return (self.destination_country or "").upper() == self.passport_country.upper()
+
+    @property
+    def stay_location(self) -> str:
+        """Where to search hotels / weather: the base area inside a region, else the city."""
+        if self.stay_area and self.destination_city and \
+                self.stay_area.lower() not in self.destination_city.lower():
+            return f"{self.stay_area}, {self.destination_city}"
+        return self.stay_area or self.destination_city or ""
 
     @property
     def travellers(self) -> int:
@@ -128,6 +142,12 @@ class GeoPoint(BaseModel):
     latitude: float
     longitude: float
     country_code: str | None = None   # ISO-2, upper case
+    extent_km: float | None = None    # diagonal of the place's bounding box (city ~10-40, island/state 100+)
+
+    @property
+    def is_region(self) -> bool:
+        """True for places too big for their centre point to mean 'near' (islands, states)."""
+        return self.extent_km is not None and self.extent_km > 60
 
 
 class DailyWeather(BaseModel):
@@ -206,3 +226,41 @@ class BudgetReport(BaseModel):
     selected_flight: FlightOption | None = None
     selected_hotel: HotelOption | None = None
     assumptions: list[str] = Field(default_factory=list)
+    strict: bool = False                    # True when re-planned to cut cost
+
+
+# ── Critic ────────────────────────────────────────────────────────────────────
+IssueCategory = Literal["budget", "hotel", "flight", "itinerary", "preferences", "weather", "data"]
+
+
+class CritiqueIssue(BaseModel):
+    category: IssueCategory
+    blocking: bool          # True = the plan must be fixed before it is shown as final
+    message: str
+    source: Literal["rules", "llm"] = "rules"
+
+
+class Critique(BaseModel):
+    round: int                              # 1 = first review, 2 = after first re-plan, ...
+    approved: bool
+    score: int | None = None                # LLM quality score 1-10
+    issues: list[CritiqueIssue] = Field(default_factory=list)
+
+    @property
+    def blocking(self) -> list[CritiqueIssue]:
+        return [i for i in self.issues if i.blocking]
+
+
+# ── Long-term memory ──────────────────────────────────────────────────────────
+class UserProfile(BaseModel):
+    """Preferences remembered across trips (stored in the LangGraph Store, keyed by user id)."""
+
+    home_city: str | None = None
+    home_airport: str | None = None
+    style: TripStyle | None = None
+    dietary: list[str] = Field(default_factory=list)
+    trips_planned: int = 0
+    # Interests are deliberately NOT remembered: "temples" for Japan says little about a Goa trip.
+
+    def is_empty(self) -> bool:
+        return not (self.home_city or self.style or self.dietary)

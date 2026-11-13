@@ -50,7 +50,7 @@ def hotels_agent(state: dict) -> dict:
         return {"hotels": []}  # day trip: no hotel needed
     try:
         hotels = search_hotels(
-            req.destination_city, req.start_date, req.end_date, adults=req.adults, style=req.style,
+            req.stay_location, req.start_date, req.end_date, adults=req.adults, style=req.style,
         )
     except Exception as e:  # noqa: BLE001
         return {"hotels": [], "errors": _error("hotels", e)}
@@ -63,7 +63,7 @@ def hotels_agent(state: dict) -> dict:
 def weather_agent(state: dict) -> dict:
     req: TripRequest = state["request"]
     try:
-        geo = geocode(req.destination_city)
+        geo = geocode(req.stay_location)
         days = get_weather(geo.latitude, geo.longitude, req.start_date, req.end_date)
     except Exception as e:  # noqa: BLE001
         return {"weather": [], "destination_geo": None, "errors": _error("weather", e)}
@@ -75,9 +75,12 @@ def research_queries(req: TripRequest) -> list[str]:
     city, year = req.destination_city, req.start_date.year
     interests = " ".join(req.interests[:3])
     food = f" {' '.join(req.dietary)} food" if req.dietary else ""
+    month = req.start_date.strftime("%B")
+    second = (f"{city} in {month} weather crowds events travel tips" if req.is_domestic
+              else f"{city} visa requirements for Indian passport holders {year}")
     return [
         f"{city} travel guide best things to do {interests}{food}".strip(),
-        f"{city} visa requirements for Indian passport holders {year}",
+        second,
         f"{city} average daily travel cost {req.style.value} traveller food transport",
     ]
 
@@ -89,7 +92,8 @@ def summarize_destination(req: TripRequest, results: list[WebResult]) -> Destina
         interests=", ".join(req.interests) or "general sightseeing",
         dietary=", ".join(req.dietary) or "none",
     )
-    trip = (f"Trip: {req.travellers} traveller(s) from {req.origin_city} to {req.destination_city}, "
+    scope = "Domestic trip (no visa needed)." if req.is_domestic else "International trip."
+    trip = (f"{scope} Trip: {req.travellers} traveller(s) from {req.origin_city} to {req.destination_city}, "
             f"{req.start_date} to {req.end_date} ({req.nights} nights), style: {req.style.value}.")
     return invoke_structured(
         DestinationBrief, [SystemMessage(system), HumanMessage(f"{trip}\n\n{format_for_llm(results)}")]

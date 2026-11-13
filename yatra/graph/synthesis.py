@@ -25,6 +25,8 @@ def budget_node(state: dict) -> dict:
         state.get("hotels") or [],
         state.get("brief"),
         fx_to_inr=fx_to_inr,
+        strict=state.get("strict_budget", False),   # set by the critic when over budget
+        center=state.get("destination_geo"),         # keeps the hotel near the stay area
     )
     return {"budget": report}
 
@@ -35,7 +37,8 @@ def itinerary_context(state: dict) -> str:
     budget: BudgetReport | None = state.get("budget")
     parts = [
         "## Trip",
-        f"- From {req.origin_city} to {req.destination_city}",
+        f"- From {req.origin_city} to {req.destination_city}"
+        + (f" (staying in {req.stay_area})" if req.stay_area else ""),
         f"- {format_day(req.start_date)} to {format_day(req.end_date)} ({req.nights} nights)",
         f"- Travellers: {req.adults} adult(s), {req.children} child(ren); style: {req.style.value}",
         f"- Interests: {', '.join(req.interests) or 'general sightseeing'}",
@@ -83,10 +86,19 @@ def itinerary_context(state: dict) -> str:
     return "\n".join(parts)
 
 
+def writer_input(state: dict) -> str:
+    """Itinerary context plus, on a re-plan, the critic's feedback to fix."""
+    text = itinerary_context(state)
+    feedback = state.get("feedback") or []
+    if feedback:
+        text += "\n\n## Reviewer feedback (fix every point)\n" + "\n".join(f"- {f}" for f in feedback)
+    return text
+
+
 def write_itinerary(state: dict) -> str:
     response = get_llm().invoke([
         SystemMessage(ITINERARY_SYSTEM),
-        HumanMessage(itinerary_context(state)),
+        HumanMessage(writer_input(state)),
     ])
     return str(response.content).strip()
 

@@ -16,6 +16,6 @@ def setup_logging() -> None:
         datefmt="%H:%M:%S",
     )
     # Third-party libraries are noisy at INFO.
-    for noisy in ("httpx", "httpcore", "urllib3", "requests_cache", "psycopg.pool"):
+    for noisy in ("httpx", "httpcore", "urllib3", "requests_cache", "psycopg.pool", "groq"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     _CONFIGURED = True
