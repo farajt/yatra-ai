@@ -115,7 +115,11 @@ class ItineraryReview(BaseModel):
 
 
 def review_itinerary(state: dict) -> ItineraryReview:
-    content = f"{itinerary_context(state)}\n\n## Itinerary to review\n\n{state.get('itinerary', '')}"
+    content = itinerary_context(state)
+    earlier = [i.message for c in state.get("critiques") or [] for i in c.blocking if i.source == "llm"]
+    if earlier:
+        content += "\n\n## Problems raised in earlier reviews\n" + "\n".join(f"- {m}" for m in earlier)
+    content += f"\n\n## Itinerary to review\n\n{state.get('itinerary', '')}"
     return invoke_structured(ItineraryReview, [SystemMessage(CRITIC_SYSTEM), HumanMessage(content)])
 
 

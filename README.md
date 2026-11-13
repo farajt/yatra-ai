@@ -18,7 +18,15 @@ under ₹3L, vegetarian"*. Yatra AI then:
    and sends blocking problems back: over budget → cheapest options, repeated sights or ignored
    interests → rewrite with feedback. It makes at most 2 revisions, so the loop always ends.
 
-> **Status:** Phase 3 complete (critic loop and long-term memory). Next: FastAPI and the web UI.
+> **Status:** Phase 4 complete: web app (FastAPI with live streaming). Next: evaluation suite and observability.
+
+## Run the web app
+
+```powershell
+python -m scripts.serve
+```
+Open http://127.0.0.1:8000, type a trip, and watch each agent appear on the route as it finishes.
+If details are missing, the question appears in the page. The plan streams in when done.
 
 ## Architecture
 
@@ -50,6 +58,8 @@ START -> load_profile -> parse_intent --(missing)--> clarify --(interrupt/resume
 | One `thread_id` per planning session | Clean state for each trip; long-term memory is keyed by user |
 | Critic = rules + LLM, only blocking issues loop | Exact checks are free and reliable; the LLM judges quality; a capped loop can't run forever |
 | Over-budget re-plan reuses fetched data | Self-correction costs no extra API quota |
+| Server-Sent Events over `fetch` | Live agent progress, and the same stream resumes after an `interrupt()` question |
+| UI builds DOM from text, no `innerHTML` | Model output can never inject HTML into the page |
 | Memory saves only what the user stated | No inferred or sensitive guesses persisted; stated-now beats remembered |
 | Model names live in `.env` | Groq retired `llama-3.3-70b-versatile` in Aug 2026, and the swap took one line |
 
@@ -63,11 +73,14 @@ yatra/
   prompts.py                           all prompts
   report.py, formatting.py             Markdown report, ₹ formatting (2,00,000)
   tools/                               flights, hotels, web search, geocoding, weather, currency
+  api/                                 FastAPI app: SSE streaming, resume after questions, report, memory
+  web/index.html                       single-page UI (no build step, no CDN scripts)
   graph/                               state, intent, agents, synthesis, critic loop, memory, builder
 scripts/
+  serve.py                             start the web app
   plan.py                              plan a trip from the terminal
   smoke_test.py                        live check of every external dependency
-tests/                                 61 offline tests: graph runs with interrupt/resume, critic loop, memory
+tests/                                 66 offline tests: API streaming, graph runs with interrupt/resume, critic loop, memory
 ```
 
 ## Setup (Windows PowerShell)

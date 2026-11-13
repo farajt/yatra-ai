@@ -90,3 +90,21 @@ def test_routing_and_replan_instructions():
 
     update = replan_node({"critiques": [_crit(budget_issue, day_issue, minor)], "revision": 0})
     assert update == {"strict_budget": True, "feedback": ["repeat temple"], "revision": 1}
+
+
+
+def test_rereview_shows_earlier_problems(monkeypatch):
+    from yatra.graph import critic as critic_mod
+    seen = {}
+
+    def fake_invoke(schema, messages, **k):
+        seen["text"] = messages[1].content
+        return critic_mod.ItineraryReview(score=8, issues=[])
+
+    monkeypatch.setattr(critic_mod, "invoke_structured", fake_invoke)
+    earlier = Critique(round=1, approved=False, issues=[CritiqueIssue(
+        category="itinerary", blocking=True, message="Baga Beach twice", source="llm")])
+    state = {"request": REQ, "budget": budget(90_000, True), "itinerary": GOOD_ITINERARY,
+             "critiques": [earlier]}
+    critic_mod.review_itinerary(state)
+    assert "Problems raised in earlier reviews" in seen["text"] and "Baga Beach twice" in seen["text"]

@@ -29,7 +29,9 @@ def describe_update(node: str, update: dict | None) -> str:
             return "could not understand the request" + suffix
         missing = req.missing_fields()
         if missing:
-            return f"need more info: {', '.join(missing)}"
+            words = {"origin_city": "departure city", "destination_city": "destination",
+                     "start_date": "start date", "end_date": "trip length"}
+            return "need more info: " + ", ".join(words.get(m, m) for m in missing)
         budget = f", budget {format_inr(req.budget_inr)}" if req.budget_inr else ""
         return (f"{req.origin_city} ({req.origin_airport or '?'}) -> {req.destination_city} "
                 f"({req.destination_airport or '?'}), {req.start_date:%d %b} - {req.end_date:%d %b}, "

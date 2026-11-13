@@ -87,9 +87,16 @@ def itinerary_context(state: dict) -> str:
 
 
 def writer_input(state: dict) -> str:
-    """Itinerary context plus, on a re-plan, the critic's feedback to fix."""
+    """Itinerary context plus, on a re-plan, the current draft and the critic's feedback.
+
+    Targeted repair, not regeneration: rewriting from scratch fixes the reported problem but
+    tends to introduce new ones, so the writer edits the existing draft instead.
+    """
     text = itinerary_context(state)
     feedback = state.get("feedback") or []
+    draft = (state.get("itinerary") or "").strip()
+    if feedback and draft:
+        text += "\n\n## Current itinerary (revise this draft)\n\n" + draft
     if feedback:
         text += "\n\n## Reviewer feedback (fix every point)\n" + "\n".join(f"- {f}" for f in feedback)
     return text

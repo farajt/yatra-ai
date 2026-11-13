@@ -222,6 +222,8 @@ def test_itinerary_issue_is_fed_back_and_fixed(fakes, monkeypatch):
     assert state["revision"] == 1 and not state.get("strict_budget")
     assert "Reviewer feedback" not in fakes["writer_inputs"][0]
     assert "replace day 4 with Meiji Shrine" in fakes["writer_inputs"][1]   # feedback reached writer
+    assert "Current itinerary (revise this draft)" in fakes["writer_inputs"][1]  # repair, not rewrite
+    assert "### Day 1" in fakes["writer_inputs"][1].split("Current itinerary")[1]
     assert "Review 1" in render_report(state) and "Meiji Shrine" in render_report(state)
 
 
