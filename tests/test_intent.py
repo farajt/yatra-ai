@@ -88,3 +88,20 @@ def test_parse_intent_applies_base_area(monkeypatch):
     assert out["request"].stay_area == "Seminyak"
     assert out["request"].stay_location == "Seminyak, Bali"
     assert any("Seminyak" in a for a in out["assumptions"])
+
+
+
+def test_stated_length_overrides_models_end_date():
+    # Regression (eval 13 Nov): "6 days in Kerala" came back as 6 nights because the model
+    # computed end_date = start + 6. The stated duration must win.
+    ext = TripExtraction(origin_city="Bengaluru", destination_city="Kerala",
+                         start_date="2027-01-12", end_date="2027-01-18", duration_days=6)
+    req, _ = build_request(ext, TODAY)
+    assert req.end_date == date(2027, 1, 17) and req.nights == 5
+
+
+def test_explicit_return_date_kept_without_duration():
+    ext = TripExtraction(origin_city="Pune", destination_city="Goa",
+                         start_date="2026-12-20", end_date="2026-12-24")
+    req, _ = build_request(ext, TODAY)
+    assert req.nights == 4

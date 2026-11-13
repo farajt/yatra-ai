@@ -28,6 +28,7 @@ from yatra.api.serializers import plan_payload
 from yatra.graph.events import NODE_LABELS, describe_update
 from yatra.graph.memory import forget_profile, get_profile
 from yatra.logging_setup import setup_logging
+from yatra.tracing import run_config
 
 log = logging.getLogger(__name__)
 WEB_DIR = Path(__file__).resolve().parent.parent / "web"
@@ -40,6 +41,8 @@ async def lifespan(_: FastAPI):
     setup_logging()
     yield
     from yatra.db import close_db
+    from yatra.tracing import flush_tracing
+    flush_tracing()
     close_db()
 
 
@@ -67,9 +70,9 @@ def sse(event: str, data: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
 
 
-def run_stream(graph, payload, thread_id: str) -> Iterator[str]:
+def run_stream(graph, payload, thread_id: str, user_id: str | None = None) -> Iterator[str]:
     """Run (or resume) the graph and translate its updates into SSE events."""
-    config = {"configurable": {"thread_id": thread_id}}
+    config = run_config(thread_id, user_id, tags=["web"])
     yield sse("session", {"thread_id": thread_id})
     try:
         question = None
@@ -118,7 +121,7 @@ def _snapshot(graph, thread_id: str):
 def start_trip(body: StartTrip, graph=Depends(get_graph)):
     thread_id = f"trip-{uuid4().hex[:10]}"
     return stream_response(run_stream(graph, {"user_query": body.query.strip(),
-                                              "user_id": body.user_id}, thread_id))
+                                              "user_id": body.user_id}, thread_id, body.user_id))
 
 
 @app.post("/api/trips/{thread_id}/answer")
@@ -126,7 +129,8 @@ def answer_question(thread_id: str, body: Answer, graph=Depends(get_graph)):
     snap = _snapshot(graph, thread_id)
     if not snap.interrupts:
         raise HTTPException(409, "This trip is not waiting for an answer")
-    return stream_response(run_stream(graph, Command(resume=body.answer.strip()), thread_id))
+    user_id = snap.values.get("user_id")
+    return stream_response(run_stream(graph, Command(resume=body.answer.strip()), thread_id, user_id))
 
 
 @app.get("/api/trips/{thread_id}")

@@ -107,7 +107,10 @@ def build_request(
     if end:
         data["end_date"] = end
     start, end = data.get("start_date"), data.get("end_date")
-    if start and not end and ext.duration_days and 0 < ext.duration_days <= 60:
+    if start and ext.duration_days and 0 < ext.duration_days <= 60:
+        # A stated length always wins over the model's own end date: models get
+        # "6 days from the 10th" wrong by one day (eval: kerala-family, ladakh-solo).
+        # Convention: N days = N-1 nights (a "7-day trip" leaves on day 7).
         end = start + timedelta(days=ext.duration_days - 1)
         data["end_date"] = end
     if start and start < on_date:

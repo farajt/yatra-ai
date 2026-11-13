@@ -114,6 +114,8 @@ def itinerary_node(state: dict) -> dict:
     try:
         text = write_itinerary(state)
     except Exception as e:  # noqa: BLE001
-        log.exception("Itinerary generation failed")
-        return {"itinerary": "", "status": "planned", "errors": [f"itinerary: {e}"], "llm_calls": 1}
-    return {"itinerary": text, "status": "planned", "llm_calls": 1}
+        log.error("Itinerary generation failed: %s", str(e)[:300])
+        # keep the previous draft (if this was a revision) and stop the repair loop
+        return {"itinerary": state.get("itinerary") or "", "itinerary_failed": True,
+                "status": "planned", "errors": [f"itinerary: {e}"], "llm_calls": 1}
+    return {"itinerary": text, "itinerary_failed": False, "status": "planned", "llm_calls": 1}

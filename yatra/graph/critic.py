@@ -79,6 +79,13 @@ def rule_checks(state: dict) -> list[CritiqueIssue]:
                 message=f"{hotel.name} has a weak or thin rating ({hotel.rating or '-'}/5, "
                         f"{hotel.reviews or 0} reviews); check recent reviews before booking."))
 
+    if state.get("itinerary_failed"):
+        issues.append(CritiqueIssue(
+            category="data", blocking=False,
+            message="The day-by-day itinerary could not be (re)written because the AI model was "
+                    "unavailable (usually a usage limit). Flights, hotel and budget are still valid."))
+        if not itinerary.strip():
+            return issues
     if not itinerary.strip():
         issues.append(CritiqueIssue(category="itinerary", blocking=True,
                                     message="Itinerary is empty; write it again."))
@@ -129,7 +136,7 @@ def critic_node(state: dict) -> dict:
     issues = rule_checks(state)
     score, errors, calls = None, [], 0
 
-    if (state.get("itinerary") or "").strip():
+    if (state.get("itinerary") or "").strip() and not state.get("itinerary_failed"):
         calls = 1
         try:
             review = review_itinerary(state)
@@ -152,7 +159,7 @@ def critic_node(state: dict) -> dict:
 
 def route_after_critic(state: dict) -> str:
     latest: Critique = state["critiques"][-1]
-    if latest.approved or state.get("revision", 0) >= MAX_REVISIONS:
+    if latest.approved or state.get("itinerary_failed") or state.get("revision", 0) >= MAX_REVISIONS:
         return "save_profile"
     return "replan"
 

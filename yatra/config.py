@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     # Keep model names in .env so the next deprecation is a one-line change.
     groq_model: str = "openai/gpt-oss-120b"       # planning, itinerary, critic
     groq_fast_model: str = "openai/gpt-oss-20b"   # cheap extraction / routing
+    # Used when the main model is rate-limited (e.g. the free tier's daily token cap).
+    # Empty = no fallback (the evaluator disables it so every score comes from one model).
+    groq_fallback_model: str = "openai/gpt-oss-20b"
     llm_temperature: float = 0.2
     llm_timeout_s: int = 60
     llm_max_retries: int = 3
@@ -33,6 +36,11 @@ class Settings(BaseSettings):
 
     # ── Database ──────────────────────────────────────────────────────────────
     database_url: str = ""      # postgresql://user:pass@localhost:5432/langgraph_memory
+
+    # ── Tracing (optional) ────────────────────────────────────────────────────
+    langfuse_public_key: str = ""
+    langfuse_secret_key: str = ""
+    langfuse_host: str = "https://cloud.langfuse.com"
 
     # ── HTTP / caching ────────────────────────────────────────────────────────
     # Nominatim (OpenStreetMap) requires an identifying User-Agent.

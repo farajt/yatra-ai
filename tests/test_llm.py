@@ -90,3 +90,30 @@ def test_invoke_structured_salvages_then_retries(monkeypatch):
     monkeypatch.setattr(llm, "get_llm", lambda fast=False: fake)
     with pytest.raises(LLMOutputError):
         llm.invoke_structured(TripExtraction, [])
+
+
+def test_quota_error_detection():
+    from yatra.errors import is_quota_error
+    assert is_quota_error("itinerary: Error code: 429 - {'error': {'message': 'Rate limit reached ...'}}")
+    assert is_quota_error("critic: LLM review unavailable (RateLimitError)")
+    assert not is_quota_error("flights: HTTP 503")
+
+
+def test_main_model_falls_back_on_rate_limit(monkeypatch):
+    from langchain_core.runnables import RunnableWithFallbacks
+    from langchain_groq import ChatGroq
+    from yatra.config import get_settings
+
+    s = get_settings()
+    monkeypatch.setattr(s, "groq_api_key", "test-key")
+    llm.get_llm.cache_clear()
+    try:
+        main = llm.get_llm()
+        assert isinstance(main, RunnableWithFallbacks)
+        assert main.fallbacks[0].model_name == s.groq_fallback_model
+        assert isinstance(llm.get_llm(fast=True), ChatGroq)
+        monkeypatch.setattr(s, "groq_fallback_model", "")      # what the evaluator does
+        llm.get_llm.cache_clear()
+        assert isinstance(llm.get_llm(), ChatGroq)
+    finally:
+        llm.get_llm.cache_clear()

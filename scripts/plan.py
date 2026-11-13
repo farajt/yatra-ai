@@ -64,7 +64,8 @@ def main() -> int:
 
     app = get_app()
     thread_id = f"trip-{uuid4().hex[:10]}"   # one planning session = one thread
-    config = {"configurable": {"thread_id": thread_id}}
+    from yatra.tracing import flush_tracing, run_config
+    config = run_config(thread_id, args.user, tags=["cli"])
     payload: dict | Command = {"user_query": query, "user_id": args.user}
     started = time.perf_counter()
     print(f"\nPlanning for '{args.user}' (session {thread_id})\n")
@@ -87,6 +88,7 @@ def main() -> int:
 
         state = app.get_state(config).values
     finally:
+        flush_tracing()
         close_db()
 
     report = render_report(state)

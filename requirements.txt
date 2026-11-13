@@ -16,6 +16,9 @@ pydantic-settings>=2.3
 requests>=2.32
 requests-cache>=1.2
 
+# Tracing (optional at runtime: only used when LANGFUSE_* keys are set)
+langfuse>=3.0
+
 # Web app
 fastapi>=0.115
 uvicorn>=0.30

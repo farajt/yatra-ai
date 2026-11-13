@@ -33,6 +33,7 @@ class TripState(TypedDict, total=False):
     # synthesis + self-correction loop
     budget: BudgetReport
     itinerary: str
+    itinerary_failed: bool         # the writer could not run (e.g. provider quota); don't loop on it
     critiques: Annotated[list[Critique], operator.add]   # one per review round
     revision: int                  # number of re-plans done
     strict_budget: bool            # set by the critic when the plan is over budget

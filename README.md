@@ -18,7 +18,7 @@ under ₹3L, vegetarian"*. Yatra AI then:
    and sends blocking problems back: over budget → cheapest options, repeated sights or ignored
    interests → rewrite with feedback. It makes at most 2 revisions, so the loop always ends.
 
-> **Status:** Phase 4 complete: web app (FastAPI with live streaming). Next: evaluation suite and observability.
+> **Status:** All five phases complete: tools, agent graph, self-correction and memory, web app, evaluation and tracing.
 
 ## Run the web app
 
@@ -73,15 +73,47 @@ yatra/
   prompts.py                           all prompts
   report.py, formatting.py             Markdown report, ₹ formatting (2,00,000)
   tools/                               flights, hotels, web search, geocoding, weather, currency
+  evals/                               evaluation cases loader, deterministic checks, LLM judge
+  tracing.py                           optional Langfuse tracing
   api/                                 FastAPI app: SSE streaming, resume after questions, report, memory
   web/index.html                       single-page UI (no build step, no CDN scripts)
   graph/                               state, intent, agents, synthesis, critic loop, memory, builder
 scripts/
   serve.py                             start the web app
+  evaluate.py                          run the evaluation suite and write a report
   plan.py                              plan a trip from the terminal
   smoke_test.py                        live check of every external dependency
-tests/                                 66 offline tests: API streaming, graph runs with interrupt/resume, critic loop, memory
+evals/cases.json                       30 test trips (dates relative to today, never stale)
+tests/                                 80 offline tests: eval metrics, API streaming, graph runs with interrupt/resume, critic loop, memory
 ```
+
+## Evaluation
+
+`python -m scripts.evaluate` runs **30 test trips** through the real planner and writes `eval_results/<run>/report.md`.
+
+The trips cover domestic and international destinations, budget to luxury, families, solo travellers, Hinglish input,
+tight or impossible budgets, missing details, past dates, and a destination with no airport. Each trip runs in a fresh
+session and user. Every metric is computed by deterministic, unit-tested Python (`yatra/evals/checks.py`):
+
+- the request was understood correctly
+- a follow-up question was asked exactly when needed
+- budget honesty
+- one section per day
+- no invented prices
+- repeated places
+- places traceable to research
+- critic approval and review rounds
+- LLM calls and latency
+
+`--judge` adds an optional LLM-as-judge score. It is treated as a secondary signal.
+
+<!-- Paste the metric table from your latest eval_results/<run>/report.md here -->
+
+## Tracing
+
+Set `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` in `.env` (free at cloud.langfuse.com). Every run from the CLI,
+the web app or the evaluator is then traced: each agent, LLM call, prompt, token count and latency, grouped by session
+and user. Without keys, tracing is off and nothing changes.
 
 ## Setup (Windows PowerShell)
 
@@ -94,6 +126,8 @@ pytest                     # offline tests, no API calls
 python -m scripts.smoke_test --paid
 python -m scripts.plan --user faraj "7 days in Japan from Pune starting 10 Dec, 2 adults, under 3L, vegetarian"
 python -m scripts.plan --user faraj --show-profile
+python -m scripts.serve              # web app at http://127.0.0.1:8000
+python -m scripts.evaluate --limit 3 # quick evaluation
 ```
 
 Everything runs on free tiers: Groq, SerpApi (250 searches/month), Tavily (1,000 credits/month),

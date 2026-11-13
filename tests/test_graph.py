@@ -277,3 +277,45 @@ def test_stated_preference_beats_memory(fakes, monkeypatch):
     assert req.style == TripStyle.LUXURY                                  # not stated -> memory
     profile = get_profile(store, "faraj")
     assert profile.home_city == "Pune" and profile.dietary == ["vegetarian"]
+
+
+# ── Provider outage (regression: Groq daily token cap hit during the 13 Nov eval) ──
+QUOTA_MSG = ("Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` "
+             "on tokens per day (TPD): Limit 200000. Please try again in 12m9.2s.', 'code': 'rate_limit_exceeded'}}")
+
+
+def test_writer_outage_does_not_loop(fakes, monkeypatch):
+    def quota(state):
+        raise RuntimeError(QUOTA_MSG)
+
+    monkeypatch.setattr(synthesis, "write_itinerary", quota)
+    app = new_app()
+    _, config = plan(app, "Pune to Japan 10 Dec, 7 days, 3L", "o1")
+    state = app.get_state(config).values
+    assert state["status"] == "planned" and state["itinerary_failed"] is True
+    assert len(state["critiques"]) == 1 and state.get("revision", 0) == 0   # no futile re-plans
+    assert fakes["reviews"] == []                                          # no LLM review either
+    assert any("could not be (re)written" in i.message for i in state["critiques"][0].issues)
+    assert state["budget"].total_inr == 234_720                           # the rest is intact
+
+
+def test_outage_during_revision_keeps_previous_draft(fakes, monkeypatch):
+    drafts = []
+
+    def writer(state):
+        if drafts:
+            raise RuntimeError(QUOTA_MSG)
+        drafts.append(_itinerary(state))
+        return drafts[0]
+
+    def review(state):
+        return ItineraryReview(score=5, issues=[ReviewIssue(category="itinerary", blocking=True,
+                                                            message="Repeat on day 2 and 4.")])
+
+    monkeypatch.setattr(synthesis, "write_itinerary", writer)
+    monkeypatch.setattr(critic, "review_itinerary", review)
+    app = new_app()
+    _, config = plan(app, "Pune to Japan 10 Dec, 7 days, 3L", "o2")
+    state = app.get_state(config).values
+    assert state["itinerary"] == drafts[0]            # first draft survives
+    assert state["itinerary_failed"] and state["revision"] == 1 and len(state["critiques"]) == 2

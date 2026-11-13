@@ -8,7 +8,8 @@ Rules:
 - Dates: output YYYY-MM-DD. Resolve relative dates ("next Friday", "15 Dec") using today's date;
   a date without a year means the next future occurrence. If only a month is given (e.g. "in December")
   leave start_date empty. If a trip length is given ("7-day", "a week", "5 nights"), set duration_days
-  (5 nights = 6 days, a week = 7 days, a weekend = 3 days).
+  (5 nights = 6 days, a week = 7 days, a weekend = 3 days) and leave end_date EMPTY:
+  the system computes the return date. Only fill end_date when the user names a return date.
 - Budget: total INR for the whole group. Indian notation: 2L / 2 lakh = 200000, 1.5L = 150000,
   50k = 50000, 1 crore = 10000000. If the budget is in another currency, leave budget_inr empty.
 - destination_city is where the traveller will STAY, not the airport city:
