@@ -13,9 +13,11 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.types import interrupt
 from pydantic import BaseModel, Field, ValidationError
 
+from yatra.airports import airport_for, guess_origin_destination
 from yatra.destinations import base_area_for
 from yatra.graph.memory import apply_profile
 from yatra.llm import invoke_structured
+from yatra.money import parse_budget_inr
 from yatra.prompts import INTENT_SYSTEM
 from yatra.schemas import TripRequest
 
@@ -96,6 +98,12 @@ def build_request(
         code = (getattr(ext, field) or "").strip().upper()
         if _IATA.match(code):
             data[field] = code
+    # Known places: the airport table is authoritative over the model's guess.
+    for city_field, airport_field in (("origin_city", "origin_airport"),
+                                      ("destination_city", "destination_airport")):
+        known = airport_for(data.get(city_field))
+        if known:
+            data[airport_field] = known
 
     country = (ext.destination_country or "").strip().upper()
     if re.fullmatch(r"[A-Z]{2}", country):
@@ -154,10 +162,20 @@ def parse_intent(state: dict) -> dict:
         log.exception("Intent extraction failed")
         return {"status": "failed", "errors": [f"intent: could not understand the request ({e})"],
                 "llm_calls": 1}
+    # Safety net: the small model sometimes drops a city in sentences like
+    # "Sri Lanka 7 days from Chennai from 17 Jan" (eval: srilanka-couple, phuket-beach).
+    ext = fill_missing_places(ext, state["user_query"])
+
+    # Budget notation ("3L", "2.5 lakh", "50k") is parsed by rules, not by the model.
+    parsed_budget = parse_budget_inr(state["user_query"])
+    if parsed_budget:
+        ext = ext.model_copy(update={"budget_inr": parsed_budget})
     request, issues = build_request(ext, on_date, state.get("request"))
 
     # Long-term memory: fill gaps from saved preferences, but never override what was said now.
     stated = {**(state.get("stated") or {}), **stated_preferences(ext)}
+    if stated.get("home_city") and request.origin_airport:
+        stated["home_airport"] = request.origin_airport   # the corrected code, not the guess
     notes: list[str] = []
     if state.get("profile"):
         request, notes = apply_profile(request, state["profile"], stated)
@@ -171,6 +189,20 @@ def parse_intent(state: dict) -> dict:
     log.info("Parsed request: missing=%s issues=%s", request.missing_fields(), issues)
     return {"request": request, "issues": issues, "stated": stated,
             "assumptions": [*(ext.assumptions or []), *notes], "llm_calls": 1}
+
+
+def fill_missing_places(ext: TripExtraction, text: str) -> TripExtraction:
+    """Fill a missing origin/destination from known place names in the text.
+    The model's answer always wins when it gave one."""
+    updates = {}
+    if not (ext.destination_city or "").strip() and (ext.stay_area or "").strip():
+        updates["destination_city"] = ext.stay_area          # model put the place in the wrong field
+    origin, destination = guess_origin_destination(text)
+    if not (ext.origin_city or "").strip() and origin:
+        updates["origin_city"] = origin
+    if not (ext.destination_city or "").strip() and "destination_city" not in updates and destination:
+        updates["destination_city"] = destination
+    return ext.model_copy(update=updates) if updates else ext
 
 
 def stated_preferences(ext: TripExtraction) -> dict:

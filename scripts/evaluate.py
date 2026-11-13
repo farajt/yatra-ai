@@ -86,6 +86,14 @@ def run_case(graph, case, judge: bool) -> dict:
             result["judge"] = judge_plan(state).model_dump()
         except Exception as e:  # noqa: BLE001
             result["judge_error"] = str(e)[:200]
+    # Saved so future checkers can re-score this run without new API calls.
+    brief = state.get("brief")
+    result["texts"] = {
+        "itinerary": state.get("itinerary") or "",
+        "grounding": " ".join([brief.summary, *brief.top_attractions, *brief.local_tips]) if brief else "",
+        "hotel": (state["budget"].selected_hotel.name
+                  if state.get("budget") and state["budget"].selected_hotel else None),
+    }
     result["seconds"] = round(time.perf_counter() - started, 1)
     result["tokens"] = tokens.total
     req = state.get("request")
@@ -161,6 +169,9 @@ def write_report(out_dir: Path, results: list[dict], meta: dict) -> Path:
               "brief; it needs checking but is not proof that it was invented.",
               "- Each trip runs in a fresh session and user, so no memory leaks between trips.",
               "- Trip length convention: N days = N-1 nights.",
+              "- Known noise in the repeat check: a place word alone (\"fort\", \"lake\"), an area "
+              "name (Fort Kochi, Dal Lake) or a transit stop can be counted as a repeat. The checker "
+              "is kept identical between runs so comparisons stay fair.",
               "- A place on consecutive days can be legitimate (a multi-day trek), so read the "
               "repeats listed below before counting them as errors.",
               "- LLM output varies between runs; compare runs, not single trips."]

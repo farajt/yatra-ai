@@ -70,6 +70,7 @@ yatra/
   config.py, llm.py, db.py, serde.py   settings, LLM factory, Postgres pool, safe checkpoint serializer
   schemas.py                           typed domain models
   budget.py                            deterministic budget engine
+  money.py, airports.py                rule-based budget parsing (3L, 2.5 lakh, 50k) and known airport codes
   prompts.py                           all prompts
   report.py, formatting.py             Markdown report, ₹ formatting (2,00,000)
   tools/                               flights, hotels, web search, geocoding, weather, currency
@@ -81,10 +82,11 @@ yatra/
 scripts/
   serve.py                             start the web app
   evaluate.py                          run the evaluation suite and write a report
+  compare_evals.py                     compare two evaluation runs (baseline vs new)
   plan.py                              plan a trip from the terminal
   smoke_test.py                        live check of every external dependency
 evals/cases.json                       30 test trips (dates relative to today, never stale)
-tests/                                 80 offline tests: eval metrics, API streaming, graph runs with interrupt/resume, critic loop, memory
+tests/                                 87 offline tests: eval metrics, API streaming, graph runs with interrupt/resume, critic loop, memory
 ```
 
 ## Evaluation
