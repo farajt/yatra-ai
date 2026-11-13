@@ -12,6 +12,7 @@ from psycopg_pool import ConnectionPool, PoolTimeout
 
 from yatra.config import get_settings
 from yatra.errors import ConfigError
+from yatra.serde import get_serializer
 
 log = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ def get_pool() -> ConnectionPool:
 @lru_cache
 def get_checkpointer() -> PostgresSaver:
     """Short-term memory: saves graph state per thread_id (needed for interrupts / HITL)."""
-    checkpointer = PostgresSaver(get_pool())
+    checkpointer = PostgresSaver(get_pool(), serde=get_serializer())
     checkpointer.setup()  # idempotent — creates tables on first run
     return checkpointer
 

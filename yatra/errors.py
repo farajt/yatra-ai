@@ -13,3 +13,7 @@ class ToolError(RuntimeError):
 
 class ConfigError(RuntimeError):
     """Raised when a required setting (API key, DB URL) is missing."""
+
+
+class LLMOutputError(RuntimeError):
+    """Raised when the LLM fails to return valid structured output after retries."""

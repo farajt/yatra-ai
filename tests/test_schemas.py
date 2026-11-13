@@ -43,4 +43,4 @@ def test_flight_option_helpers():
     )
     assert opt.stops == 1
     assert opt.airlines == ["ANA", "Air India"]
-    assert "Rs 48,500" in opt.summary()
+    assert "₹48,500" in opt.summary()

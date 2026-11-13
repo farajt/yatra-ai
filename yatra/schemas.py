@@ -7,7 +7,9 @@ from datetime import date
 from enum import Enum
 from typing import ClassVar, Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
+
+from yatra.formatting import format_inr
 
 
 # ── Trip request (what the user wants) ────────────────────────────────────────
@@ -95,7 +97,7 @@ class FlightOption(BaseModel):
         return (
             f"{', '.join(self.airlines)} | {first.from_airport} {first.depart_at} -> "
             f"{last.to_airport} {last.arrive_at} | {h}h{m:02d}m, {stops} | "
-            f"Rs {self.price_inr:,} ({self.price_covers.replace('_', ' ')})"
+            f"{format_inr(self.price_inr)} ({self.price_covers.replace('_', ' ')})"
         )
 
 
@@ -116,7 +118,7 @@ class HotelOption(BaseModel):
     def summary(self) -> str:
         stars = f"{self.hotel_class:g}*" if self.hotel_class else "unrated"
         rating = f"{self.rating}/5 ({self.reviews or 0} reviews)" if self.rating else "no rating"
-        price = f"Rs {self.price_per_night_inr:,}/night" if self.price_per_night_inr else "price n/a"
+        price = f"{format_inr(self.price_per_night_inr)}/night" if self.price_per_night_inr else "price n/a"
         return f"{self.name} | {stars} | {rating} | {price}"
 
 
@@ -152,3 +154,55 @@ class FxRate(BaseModel):
     rate: float           # 1 base = rate quote
     as_of: str = ""
     source: str = ""
+
+
+# ── Agent outputs ─────────────────────────────────────────────────────────────
+class DestinationBrief(BaseModel):
+    """Research agent output, distilled by the LLM from web search results."""
+
+    summary: str = Field(description="2-3 sentence overview of the destination for this trip")
+    # list fields accept null from the LLM (see _none_to_list) but are always lists afterwards
+    top_attractions: list[str] | None = Field(
+        default_factory=list, description="Up to 10 attractions/experiences matching the traveller's interests"
+    )
+    visa_info: str | None = Field(
+        "", description="Visa requirement for the traveller's passport, as stated in the sources"
+    )
+    local_tips: list[str] | None = Field(
+        default_factory=list, description="Practical tips: transport passes, etiquette, food for dietary needs"
+    )
+    daily_spend_per_person: float | None = Field(
+        None, description="Typical daily spend per person (food, local transport, entry fees), excluding hotel"
+    )
+    daily_spend_currency: str | None = Field(None, description="ISO currency code of daily_spend_per_person")
+    daily_spend_basis: str | None = Field("", description="Where the daily spend figure comes from")
+    sources: list[str] | None = Field(default_factory=list)   # filled by code from search results
+
+    @field_validator("top_attractions", "local_tips", "sources", mode="before")
+    @classmethod
+    def _none_to_list(cls, v):
+        return [] if v is None else v
+
+    @field_validator("visa_info", "daily_spend_basis", mode="before")
+    @classmethod
+    def _none_to_str(cls, v):
+        return "" if v is None else v
+
+
+class BudgetLine(BaseModel):
+    label: str
+    amount_inr: int
+    note: str = ""
+
+
+class BudgetReport(BaseModel):
+    """Produced by deterministic Python (yatra/budget.py) — no LLM arithmetic."""
+
+    lines: list[BudgetLine]
+    total_inr: int
+    budget_inr: int | None = None
+    within_budget: bool | None = None       # None when the user gave no budget
+    difference_inr: int | None = None       # budget - total; negative means over budget
+    selected_flight: FlightOption | None = None
+    selected_hotel: HotelOption | None = None
+    assumptions: list[str] = Field(default_factory=list)
