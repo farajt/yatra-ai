@@ -319,3 +319,24 @@ def test_outage_during_revision_keeps_previous_draft(fakes, monkeypatch):
     state = app.get_state(config).values
     assert state["itinerary"] == drafts[0]            # first draft survives
     assert state["itinerary_failed"] and state["revision"] == 1 and len(state["critiques"]) == 2
+
+
+
+def test_empty_writer_reply_is_a_failure(monkeypatch):
+    class Empty:
+        content = ""
+
+    class FakeLLM:
+        calls = 0
+
+        def invoke(self, messages):
+            FakeLLM.calls += 1
+            return Empty()
+
+    monkeypatch.setattr(synthesis, "get_llm", lambda: FakeLLM())
+    monkeypatch.setattr(synthesis, "itinerary_context", lambda state: "ctx")
+    with pytest.raises(Exception, match="empty reply"):
+        synthesis.write_itinerary({})
+    assert FakeLLM.calls == 2                                     # retried once
+    out = synthesis.itinerary_node({"itinerary": "### Day 1 draft"})
+    assert out["itinerary"] == "### Day 1 draft" and out["itinerary_failed"] is True

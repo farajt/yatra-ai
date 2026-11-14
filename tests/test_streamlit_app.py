@@ -18,8 +18,11 @@ APP = str(PROJECT_ROOT / "streamlit_app.py")
 
 
 @pytest.fixture
-def planner(fakes, monkeypatch):  # noqa: F811
+def planner(fakes, monkeypatch, tmp_path):  # noqa: F811
     import streamlit as st
+    import yatra.examples
+    # don't render the real examples/ folder: tests must not depend on generated files
+    monkeypatch.setattr(yatra.examples.load_examples, "__defaults__", (tmp_path / "no-examples",))
     graph = build_graph(InMemorySaver(serde=get_serializer()), InMemoryStore())
     monkeypatch.setattr(yatra.graph, "get_app", lambda: graph)
     st.cache_resource.clear()

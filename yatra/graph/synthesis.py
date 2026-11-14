@@ -6,6 +6,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 from yatra.budget import compute_budget
 from yatra.formatting import format_day
+from yatra.errors import LLMOutputError
 from yatra.llm import get_llm
 from yatra.prompts import ITINERARY_SYSTEM
 from yatra.schemas import BudgetReport, TripRequest
@@ -102,12 +103,16 @@ def writer_input(state: dict) -> str:
     return text
 
 
-def write_itinerary(state: dict) -> str:
-    response = get_llm().invoke([
-        SystemMessage(ITINERARY_SYSTEM),
-        HumanMessage(writer_input(state)),
-    ])
-    return str(response.content).strip()
+def write_itinerary(state: dict, attempts: int = 2) -> str:
+    """Write (or repair) the itinerary. An empty reply is a failure, not a plan: gpt-oss
+    occasionally returns no text without an error (seen while generating examples)."""
+    messages = [SystemMessage(ITINERARY_SYSTEM), HumanMessage(writer_input(state))]
+    for _ in range(attempts):
+        text = str(get_llm().invoke(messages).content).strip()
+        if text:
+            return text
+        log.warning("Itinerary writer returned an empty reply; retrying")
+    raise LLMOutputError("the itinerary writer returned an empty reply")
 
 
 def itinerary_node(state: dict) -> dict:

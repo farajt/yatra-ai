@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     llm_temperature: float = 0.2
     llm_timeout_s: int = 60
     llm_max_retries: int = 3
+    # gpt-oss shares one output budget between hidden reasoning and the answer; at Groq's default
+    # ("medium") it sometimes spends it all and returns an empty reply. Low effort + headroom fixes it.
+    llm_reasoning_effort: str = "low"     # low | medium | high (gpt-oss models only)
+    llm_max_tokens: int = 4096
 
     # ── External APIs ─────────────────────────────────────────────────────────
     serpapi_api_key: str = ""   # Google Flights + Google Hotels (250 free searches/month)

@@ -64,7 +64,7 @@ def main() -> int:
             payload = Command(resume="Please use the details already given.")
         state = graph.get_state(config).values
         plan = plan_payload(state, thread)
-        if plan["status"] != "planned" or state.get("itinerary_failed") or not plan["itinerary"]:
+        if plan["status"] != "planned" or not plan["itinerary"].strip() or not plan.get("brief"):
             print(f"  skipped: plan incomplete ({'; '.join(plan['errors'])[:200]})")
             continue
         plan.update(example_name=name, query=query, generated_on=date.today().isoformat())

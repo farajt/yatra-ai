@@ -63,8 +63,10 @@ class _FakeModel:
     def __init__(self, outcomes):
         self.outcomes = list(outcomes)
         self.calls = 0
+        self.methods = []
 
     def with_structured_output(self, schema, method):
+        self.methods.append(method)
         return self
 
     def invoke(self, messages):
@@ -110,6 +112,7 @@ def test_main_model_falls_back_on_rate_limit(monkeypatch):
     try:
         main = llm.get_llm()
         assert isinstance(main, RunnableWithFallbacks)
+        assert main.runnable.reasoning_effort == "low" and main.runnable.max_tokens == 4096
         assert main.fallbacks[0].model_name == s.groq_fallback_model
         assert isinstance(llm.get_llm(fast=True), ChatGroq)
         monkeypatch.setattr(s, "groq_fallback_model", "")      # what the evaluator does
@@ -117,3 +120,13 @@ def test_main_model_falls_back_on_rate_limit(monkeypatch):
         assert isinstance(llm.get_llm(), ChatGroq)
     finally:
         llm.get_llm.cache_clear()
+
+
+
+def test_second_attempt_switches_to_json_schema(monkeypatch):
+    # Seen live: "Unknown tool type: 'functions.DestinationBrief'" on tool calling.
+    fake = _FakeModel([ValueError("Unknown tool type: 'functions.TripExtraction'"),
+                       TripExtraction(origin_city="Pune")])
+    monkeypatch.setattr(llm, "get_llm", lambda fast=False: fake)
+    assert llm.invoke_structured(TripExtraction, []).origin_city == "Pune"
+    assert fake.methods == ["function_calling", "json_schema"]

@@ -20,12 +20,17 @@ T = TypeVar("T", bound=BaseModel)
 
 def _chat(model: str) -> BaseChatModel:
     s = get_settings()
+    extra = {}
+    if "gpt-oss" in model and s.llm_reasoning_effort:
+        extra["reasoning_effort"] = s.llm_reasoning_effort
     return ChatGroq(
         model=model,
         api_key=s.groq_api_key,
         temperature=s.llm_temperature,
         timeout=s.llm_timeout_s,
         max_retries=s.llm_max_retries,
+        max_tokens=s.llm_max_tokens,
+        **extra,
     )
 
 
@@ -84,16 +89,25 @@ def salvage_tool_call(error: Exception, schema: type[T]) -> T | None:
         return None
 
 
+# Tried in order. Tool calling is the most reliable on Groq, but gpt-oss sometimes answers in
+# prose, names the tool "functions.X", or truncates the JSON; a JSON-schema response is a
+# different code path that usually succeeds when tool calling just failed.
+STRUCTURED_METHODS = ("function_calling", "json_schema")
+
+
 def invoke_structured(
     schema: type[T], messages: list[BaseMessage], *, fast: bool = False, attempts: int = 2
 ) -> T:
-    """Call the LLM and parse its output into `schema` (via tool calling).
+    """Call the LLM and parse its output into `schema`.
 
-    Robustness ladder: 1) normal call  2) salvage a rejected tool call  3) retry once.
+    Robustness ladder: 1) tool call  2) salvage a rejected tool call  3) retry with a JSON-schema
+    response instead of a tool call.
     """
-    model = get_llm(fast=fast).with_structured_output(schema, method="function_calling")
+    llm = get_llm(fast=fast)
     last_error: Exception | None = None
     for attempt in range(1, attempts + 1):
+        method = STRUCTURED_METHODS[min(attempt, len(STRUCTURED_METHODS)) - 1]
+        model = llm.with_structured_output(schema, method=method)
         try:
             result = model.invoke(messages)
             if result is not None:
@@ -107,5 +121,6 @@ def invoke_structured(
                 log.info("Recovered %s from a rejected tool call", schema.__name__)
                 return salvaged
             last_error = e
-        log.warning("Structured output attempt %d/%d failed: %s", attempt, attempts, last_error)
+        log.warning("Structured output attempt %d/%d (%s) failed: %s", attempt, attempts, method,
+                    str(last_error)[:300])
     raise LLMOutputError(f"{schema.__name__}: {last_error}")

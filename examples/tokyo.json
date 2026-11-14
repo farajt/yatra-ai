@@ -1,0 +1,279 @@
+{
+ "thread_id": "example-tokyo-dfe8fd",
+ "status": "planned",
+ "request": {
+  "origin_city": "Pune",
+  "origin_airport": "PNQ",
+  "destination_city": "Tokyo",
+  "destination_airport": "HND",
+  "destination_country": "JP",
+  "stay_area": null,
+  "start_date": "2026-12-29",
+  "end_date": "2027-01-04",
+  "adults": 2,
+  "children": 0,
+  "budget_inr": 300000,
+  "style": "mid",
+  "interests": [
+   "food",
+   "temples"
+  ],
+  "dietary": [
+   "vegetarian"
+  ],
+  "passport_country": "IN",
+  "nights": 6,
+  "travellers": 2,
+  "stay_location": "Tokyo",
+  "is_domestic": false,
+  "start_label": "Tue 29 Dec 2026",
+  "end_label": "Mon 04 Jan 2027"
+ },
+ "assumptions": [
+  "Interpreted Japan as Tokyo"
+ ],
+ "budget": {
+  "lines": [
+   {
+    "label": "Flights",
+    "amount_inr": 316794,
+    "note": "round trip, 2 traveller(s), Google Flights"
+   },
+   {
+    "label": "Hotel",
+    "amount_inr": 47806,
+    "note": "6 night(s) at Apa Hotel Ningyocho Ekihigashi, Google Hotels quote for 2 adult(s)"
+   },
+   {
+    "label": "Food, local transport & activities",
+    "amount_inr": 74228,
+    "note": "₹5,302 x 2 traveller(s) x 7 day(s)"
+   }
+  ],
+  "total_inr": 438828,
+  "budget_inr": 300000,
+  "within_budget": false,
+  "difference_inr": -138828,
+  "assumptions": [
+   "Re-planned to save money: cheapest flight and cheapest suitable hotel.",
+   "Daily spend: ₹5,302/person/day (9,000 JPY/person/day from Mid‑range daily expenses in Tokyo typically range from ¥6,000–¥12,000 (midpoint ¥9,000) according to a 2026 travel guide.), 7 days.",
+   "No hotel fits the remaining budget; cheapest option selected."
+  ],
+  "strict": true,
+  "flight": {
+   "summary": "ANA, Air India | PNQ 2026-12-29 08:45 -> HND 2026-12-30 05:55 | 17h40m, 1 stop(s) | ₹3,16,794 (round trip)",
+   "airlines": [
+    "ANA",
+    "Air India"
+   ],
+   "stops": 1,
+   "duration_min": 1060,
+   "price_inr": 316794,
+   "price_covers": "round_trip",
+   "depart": "PNQ 2026-12-29 08:45",
+   "arrive": "HND 2026-12-30 05:55"
+  },
+  "hotel": {
+   "name": "Apa Hotel Ningyocho Ekihigashi",
+   "hotel_class": 3.0,
+   "rating": 4.2,
+   "reviews": 482,
+   "price_per_night_inr": 7968,
+   "total_price_inr": 47806,
+   "latitude": 35.6881189,
+   "longitude": 139.7841259,
+   "amenities": [
+    "Free Wi-Fi",
+    "Restaurant",
+    "Accessible"
+   ],
+   "link": "https://www.apahotel.com/hotel/syutoken/tokyo/ningyocho-ekihigashi/?utm_source=google&utm_medium=maps",
+   "source": "google_hotels"
+  }
+ },
+ "other_flights": [
+  "IndiGo, JAL | PNQ 2026-12-29 14:25 -> HND 2026-12-30 06:30 | 12h35m, 1 stop(s) | ₹3,29,292 (round trip)",
+  "Air India | PNQ 2026-12-29 08:45 -> HND 2026-12-30 05:55 | 17h40m, 1 stop(s) | ₹3,33,594 (round trip)",
+  "Cathay Pacific, IndiGo, JAL | PNQ 2026-12-29 21:35 -> HND 2026-12-30 20:25 | 19h20m, 2 stop(s) | ₹4,96,686 (round trip)"
+ ],
+ "weather": [
+  {
+   "day": "2026-12-29",
+   "temp_max_c": 10.7,
+   "temp_min_c": 1.8,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Overcast",
+   "source": "last_year",
+   "label": "Tue 29 Dec 2026"
+  },
+  {
+   "day": "2026-12-30",
+   "temp_max_c": 13.9,
+   "temp_min_c": 0.5,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Overcast",
+   "source": "last_year",
+   "label": "Wed 30 Dec 2026"
+  },
+  {
+   "day": "2026-12-31",
+   "temp_max_c": 12.0,
+   "temp_min_c": 2.7,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Overcast",
+   "source": "last_year",
+   "label": "Thu 31 Dec 2026"
+  },
+  {
+   "day": "2027-01-01",
+   "temp_max_c": 9.3,
+   "temp_min_c": 3.4,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Overcast",
+   "source": "last_year",
+   "label": "Fri 01 Jan 2027"
+  },
+  {
+   "day": "2027-01-02",
+   "temp_max_c": 8.6,
+   "temp_min_c": 0.9,
+   "precip_mm": 5.0,
+   "precip_prob_pct": null,
+   "condition": "Heavy snow",
+   "source": "last_year",
+   "label": "Sat 02 Jan 2027"
+  },
+  {
+   "day": "2027-01-03",
+   "temp_max_c": 9.2,
+   "temp_min_c": -0.7,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Overcast",
+   "source": "last_year",
+   "label": "Sun 03 Jan 2027"
+  },
+  {
+   "day": "2027-01-04",
+   "temp_max_c": 10.0,
+   "temp_min_c": 2.2,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Clear sky",
+   "source": "last_year",
+   "label": "Mon 04 Jan 2027"
+  }
+ ],
+ "brief": {
+  "summary": "Tokyo offers a blend of historic temples, bustling markets, and a surprisingly rich vegetarian food scene. Over six nights you’ll explore iconic sites such as Senso‑ji and Meiji Jingu, sample vegan‑friendly bites at Tsukiji and local ramen shops, and enjoy a mid‑range experience with comfortable transport and dining.",
+  "top_attractions": [
+   "Senso‑ji Temple (Asakusa)",
+   "Meiji Jingu Shrine (Shibuya)",
+   "Tsukiji Outer Market (vegan snacks)",
+   "Gonpachi (Shibuya)"
+  ],
+  "visa_info": "Indian passport holders need to obtain a visa before traveling to Japan; the e‑visa must be applied for online prior to departure.",
+  "local_tips": [
+   "Seek out vegan bento at Tokyo Station’s platform 8 for a quick train snack.",
+   "Try vegetarian ramen at Uzu or T’s Tantan for a hearty meal.",
+   "Use HappyCow or local guides to find vegetarian‑friendly restaurants like Bon and Zen.",
+   "Enjoy a matcha treat at Age Manchu in Asakusa after visiting Senso‑ji."
+  ],
+  "daily_spend_per_person": 9000.0,
+  "daily_spend_currency": "JPY",
+  "daily_spend_basis": "Mid‑range daily expenses in Tokyo typically range from ¥6,000–¥12,000 (midpoint ¥9,000) according to a 2026 travel guide.",
+  "sources": [
+   "https://www.youtube.com/watch?v=TZc-rqdm0-o",
+   "https://www.neverendingvoyage.com/vegetarian-survival-guide-to-japan",
+   "https://the-shooting-star.com/japan-vegan-vegetarian-survival-guide",
+   "https://www.japan.travel/en/guide/vegetarian-guide",
+   "https://www.youtube.com/watch?v=EjJeD6ZoyZs",
+   "https://www.peninsulavisa.com/visa-requirements/india-to-japan",
+   "https://japan-visa.com/guides/visa-free",
+   "https://www.us.emb-japan.go.jp/itpr_en/travel_and_visa.html"
+  ]
+ },
+ "itinerary": "### Day 1 — Tue 29 Dec 2026  \n**Morning**  \n- Depart Pune (PNQ) at 08:45.  \n- Flight includes one stop; arrive at Tokyo Haneda (HND) at 05:55 on 30 Dec.  \n\n**Afternoon**  \n- Transfer to Apa Hotel Ningyocho Ekihigashi.  \n- Check‑in and settle into the room.  \n\n**Evening**  \n- Rest and recover from the long journey.  \n- Light stroll around the hotel’s vicinity if energy allows.  \n\n**Practical tip**  \nPack a small carry‑on with a change of clothes and a travel pillow to make the overnight flight more comfortable.\n\n---\n\n### Day 2 — Wed 30 Dec 2026  \n**Morning**  \n- Breakfast at the hotel restaurant (vegetarian options available).  \n- Visit Senso‑ji Temple in Asakusa (close to the hotel).  \n\n**Afternoon**  \n- Enjoy a matcha treat at Age Manchu in Asakusa after the temple visit.  \n- Explore Nakamise‑dori for souvenirs and street snacks.  \n\n**Evening**  \n- Dinner at Bon and Zen, a vegetarian‑friendly restaurant nearby.  \n\n**Practical tip**  \nWear comfortable shoes; the temple grounds and surrounding streets involve a fair amount of walking.\n\n---\n\n### Day 3 — Thu 31 Dec 2026  \n**Morning**  \n- Take the train to Shibuya.  \n- Visit Meiji Jingu Shrine, a short walk from the station.  \n\n**Afternoon**  \n- Lunch at Uzu, known for vegetarian ramen.  \n- Stroll through Shibuya’s bustling streets and the famous scramble crossing.  \n\n**Evening**  \n- Dinner at Gonpachi, a popular spot for vegetarian-friendly dishes.  \n\n**Practical tip**  \nUse a transit card (Suica or Pasmo) for seamless travel between stations.\n\n---\n\n### Day 4 — Fri 01 Jan 2027  \n**Morning**  \n- Early visit to Meiji Jingu Shrine to experience New Year’s traditions.  \n\n**Afternoon**  \n- Lunch at Bon and Zen, enjoying a calm vegetarian meal.  \n- Return to the hotel for a brief rest.  \n\n**Evening**  \n- Optional quiet walk around the hotel area or a short visit to a nearby café.  \n\n**Practical tip**  \nNew Year’s celebrations can be crowded; arrive early to secure a good spot at the shrine.\n\n---\n\n### Day 5 — Sat 02 Jan",
+ "critiques": [
+  {
+   "round": 1,
+   "approved": false,
+   "score": 3,
+   "issues": [
+    {
+     "category": "budget",
+     "blocking": true,
+     "message": "Plan is ₹1,38,828 over budget; re-plan with the cheapest flight and hotel.",
+     "source": "rules"
+    },
+    {
+     "category": "itinerary",
+     "blocking": true,
+     "message": "Itinerary has 5 day sections but the trip has 7 days; write exactly one '### Day N' section per day.",
+     "source": "rules"
+    },
+    {
+     "category": "itinerary",
+     "blocking": true,
+     "message": "Meiji Jingu Shrine is scheduled on both Day 3 and Day 4, which violates the rule of not repeating attractions on multiple days; move one visit to a different temple or remove the duplicate.",
+     "source": "llm"
+    },
+    {
+     "category": "itinerary",
+     "blocking": true,
+     "message": "Bon and Zen restaurant appears on both Day 2 and Day 4; replace one with another vegetarian spot to avoid repetition.",
+     "source": "llm"
+    },
+    {
+     "category": "data",
+     "blocking": true,
+     "message": "The itinerary plans a hotel transfer on Day 1 afternoon, but the flight arrives on Day 2; shift the transfer to Day 2.",
+     "source": "llm"
+    },
+    {
+     "category": "itinerary",
+     "blocking": true,
+     "message": "Days 5, 6, and 7 are missing from the itinerary; add specific activities for each day to complete the six-night plan.",
+     "source": "llm"
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "approved": false,
+   "score": null,
+   "issues": [
+    {
+     "category": "budget",
+     "blocking": false,
+     "message": "Still ₹1,38,828 over budget even with the cheapest options; raise the budget to about ₹4,39,000.",
+     "source": "rules"
+    },
+    {
+     "category": "data",
+     "blocking": false,
+     "message": "The day-by-day itinerary could not be (re)written because the AI model was unavailable (usually a usage limit). Flights, hotel and budget are still valid.",
+     "source": "rules"
+    },
+    {
+     "category": "itinerary",
+     "blocking": true,
+     "message": "Itinerary has 5 day sections but the trip has 7 days; write exactly one '### Day N' section per day.",
+     "source": "rules"
+    }
+   ]
+  }
+ ],
+ "errors": [
+  "itinerary: the itinerary writer returned an empty reply"
+ ],
+ "llm_calls": 5,
+ "report_markdown": "# Tokyo trip plan\n\n**Route:** Pune → Tokyo  \n**Dates:** Tue 29 Dec 2026 → Mon 04 Jan 2027 (6 nights)  \n**Travellers:** 2 adults · **Style:** mid\n**Interests:** food, temples · **Dietary:** vegetarian\n> Note: Interpreted Japan as Tokyo\n\n## Budget\n\n| Item | Amount | Notes |\n|---|---:|---|\n| Flights | ₹3,16,794 | round trip, 2 traveller(s), Google Flights |\n| Hotel | ₹47,806 | 6 night(s) at Apa Hotel Ningyocho Ekihigashi, Google Hotels quote for 2 adult(s) |\n| Food, local transport & activities | ₹74,228 | ₹5,302 x 2 traveller(s) x 7 day(s) |\n| **Total** | **₹4,38,828** | |\n\n**Over your budget of ₹3,00,000 by ₹1,38,828.**\n\nAssumptions:\n- Re-planned to save money: cheapest flight and cheapest suitable hotel.\n- Daily spend: ₹5,302/person/day (9,000 JPY/person/day from Mid‑range daily expenses in Tokyo typically range from ¥6,000–¥12,000 (midpoint ¥9,000) according to a 2026 travel guide.), 7 days.\n- No hotel fits the remaining budget; cheapest option selected.\n\n## Flight\n\n**Selected:** ANA, Air India | PNQ 2026-12-29 08:45 -> HND 2026-12-30 05:55 | 17h40m, 1 stop(s) | ₹3,16,794 (round trip)\n\nOther options:\n- IndiGo, JAL | PNQ 2026-12-29 14:25 -> HND 2026-12-30 06:30 | 12h35m, 1 stop(s) | ₹3,29,292 (round trip)\n- Air India | PNQ 2026-12-29 08:45 -> HND 2026-12-30 05:55 | 17h40m, 1 stop(s) | ₹3,33,594 (round trip)\n- Cathay Pacific, IndiGo, JAL | PNQ 2026-12-29 21:35 -> HND 2026-12-30 20:25 | 19h20m, 2 stop(s) | ₹4,96,686 (round trip)\n\n## Hotel\n\n**Selected:** Apa Hotel Ningyocho Ekihigashi | 3* | 4.2/5 (482 reviews) | ₹7,968/night\n[Hotel website](https://www.apahotel.com/hotel/syutoken/tokyo/ningyocho-ekihigashi/?utm_source=google&utm_medium=maps)\n\n## Typical weather (same dates last year)\n\n| Day | Conditions | Temp (°C) | Rain (mm) |\n|---|---|---|---|\n| Tue 29 Dec 2026 | Overcast | 1.8 – 10.7 | 0.0 |\n| Wed 30 Dec 2026 | Overcast | 0.5 – 13.9 | 0.0 |\n| Thu 31 Dec 2026 | Overcast | 2.7 – 12.0 | 0.0 |\n| Fri 01 Jan 2027 | Overcast | 3.4 – 9.3 | 0.0 |\n| Sat 02 Jan 2027 | Heavy snow | 0.9 – 8.6 | 5.0 |\n| Sun 03 Jan 2027 | Overcast | -0.7 – 9.2 | 0.0 |\n| Mon 04 Jan 2027 | Clear sky | 2.2 – 10.0 | 0.0 |\n\n## Destination brief\n\nTokyo offers a blend of historic temples, bustling markets, and a surprisingly rich vegetarian food scene. Over six nights you’ll explore iconic sites such as Senso‑ji and Meiji Jingu, sample vegan‑friendly bites at Tsukiji and local ramen shops, and enjoy a mid‑range experience with comfortable transport and dining.\n\n**Visa (IN passport):** Indian passport holders need to obtain a visa before traveling to Japan; the e‑visa must be applied for online prior to departure. *Always verify on the official embassy / e-visa website before booking.*\n\n**Tips:**\n- Seek out vegan bento at Tokyo Station’s platform 8 for a quick train snack.\n- Try vegetarian ramen at Uzu or T’s Tantan for a hearty meal.\n- Use HappyCow or local guides to find vegetarian‑friendly restaurants like Bon and Zen.\n- Enjoy a matcha treat at Age Manchu in Asakusa after visiting Senso‑ji.\n\n## Itinerary\n\n### Day 1 — Tue 29 Dec 2026  \n**Morning**  \n- Depart Pune (PNQ) at 08:45.  \n- Flight includes one stop; arrive at Tokyo Haneda (HND) at 05:55 on 30 Dec.  \n\n**Afternoon**  \n- Transfer to Apa Hotel Ningyocho Ekihigashi.  \n- Check‑in and settle into the room.  \n\n**Evening**  \n- Rest and recover from the long journey.  \n- Light stroll around the hotel’s vicinity if energy allows.  \n\n**Practical tip**  \nPack a small carry‑on with a change of clothes and a travel pillow to make the overnight flight more comfortable.\n\n---\n\n### Day 2 — Wed 30 Dec 2026  \n**Morning**  \n- Breakfast at the hotel restaurant (vegetarian options available).  \n- Visit Senso‑ji Temple in Asakusa (close to the hotel).  \n\n**Afternoon**  \n- Enjoy a matcha treat at Age Manchu in Asakusa after the temple visit.  \n- Explore Nakamise‑dori for souvenirs and street snacks.  \n\n**Evening**  \n- Dinner at Bon and Zen, a vegetarian‑friendly restaurant nearby.  \n\n**Practical tip**  \nWear comfortable shoes; the temple grounds and surrounding streets involve a fair amount of walking.\n\n---\n\n### Day 3 — Thu 31 Dec 2026  \n**Morning**  \n- Take the train to Shibuya.  \n- Visit Meiji Jingu Shrine, a short walk from the station.  \n\n**Afternoon**  \n- Lunch at Uzu, known for vegetarian ramen.  \n- Stroll through Shibuya’s bustling streets and the famous scramble crossing.  \n\n**Evening**  \n- Dinner at Gonpachi, a popular spot for vegetarian-friendly dishes.  \n\n**Practical tip**  \nUse a transit card (Suica or Pasmo) for seamless travel between stations.\n\n---\n\n### Day 4 — Fri 01 Jan 2027  \n**Morning**  \n- Early visit to Meiji Jingu Shrine to experience New Year’s traditions.  \n\n**Afternoon**  \n- Lunch at Bon and Zen, enjoying a calm vegetarian meal.  \n- Return to the hotel for a brief rest.  \n\n**Evening**  \n- Optional quiet walk around the hotel area or a short visit to a nearby café.  \n\n**Practical tip**  \nNew Year’s celebrations can be crowded; arrive early to secure a good spot at the shrine.\n\n---\n\n### Day 5 — Sat 02 Jan\n\n## Quality review\n\n- **Review 1** · score 3/10: rejected, 6 blocking issue(s) sent back\n  - ✗ Plan is ₹1,38,828 over budget; re-plan with the cheapest flight and hotel.\n  - ✗ Itinerary has 5 day sections but the trip has 7 days; write exactly one '### Day N' section per day.\n  - ✗ Meiji Jingu Shrine is scheduled on both Day 3 and Day 4, which violates the rule of not repeating attractions on multiple days; move one visit to a different temple or remove the duplicate.\n  - ✗ Bon and Zen restaurant appears on both Day 2 and Day 4; replace one with another vegetarian spot to avoid repetition.\n  - ✗ The itinerary plans a hotel transfer on Day 1 afternoon, but the flight arrives on Day 2; shift the transfer to Day 2.\n  - ✗ Days 5, 6, and 7 are missing from the itinerary; add specific activities for each day to complete the six-night plan.\n- **Review 2**: rejected, 1 blocking issue(s) sent back\n  - ✗ Itinerary has 5 day sections but the trip has 7 days; write exactly one '### Day N' section per day.\n\n*Revision limit reached; the remaining issues above were not fully resolved.*\n\nNotes:\n- Still ₹1,38,828 over budget even with the cheapest options; raise the budget to about ₹4,39,000.\n- The day-by-day itinerary could not be (re)written because the AI model was unavailable (usually a usage limit). Flights, hotel and budget are still valid.\n\n## Sources\n\n- https://www.youtube.com/watch?v=TZc-rqdm0-o\n- https://www.neverendingvoyage.com/vegetarian-survival-guide-to-japan\n- https://the-shooting-star.com/japan-vegan-vegetarian-survival-guide\n- https://www.japan.travel/en/guide/vegetarian-guide\n- https://www.youtube.com/watch?v=EjJeD6ZoyZs\n- https://www.peninsulavisa.com/visa-requirements/india-to-japan\n- https://japan-visa.com/guides/visa-free\n- https://www.us.emb-japan.go.jp/itpr_en/travel_and_visa.html\n\n## Warnings\n\n- itinerary: the itinerary writer returned an empty reply\n\n*Generated by Yatra AI · 5 LLM calls*\n",
+ "example_name": "tokyo",
+ "query": "7 days in Japan from Pune starting 29 Dec 2026, 2 adults, under 3L, vegetarian, food and temples",
+ "generated_on": "2026-11-14"
+}
