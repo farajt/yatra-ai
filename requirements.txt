@@ -20,6 +20,7 @@ requests-cache>=1.2
 langfuse>=3.0
 
 # Web app
+streamlit>=1.50
 fastapi>=0.115
 uvicorn>=0.30
 

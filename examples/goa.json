@@ -1,0 +1,181 @@
+{
+ "thread_id": "example-goa-275c20",
+ "status": "planned",
+ "request": {
+  "origin_city": "Mumbai",
+  "origin_airport": "BOM",
+  "destination_city": "Goa",
+  "destination_airport": "GOI",
+  "destination_country": "IN",
+  "stay_area": "Calangute",
+  "start_date": "2026-12-14",
+  "end_date": "2026-12-17",
+  "adults": 2,
+  "children": 0,
+  "budget_inr": null,
+  "style": "budget",
+  "interests": [],
+  "dietary": [
+   "vegetarian"
+  ],
+  "passport_country": "IN",
+  "nights": 3,
+  "travellers": 2,
+  "stay_location": "Calangute, Goa",
+  "is_domestic": true,
+  "start_label": "Mon 14 Dec 2026",
+  "end_label": "Thu 17 Dec 2026"
+ },
+ "assumptions": [
+  "Based in Calangute, a popular area of Goa"
+ ],
+ "budget": {
+  "lines": [
+   {
+    "label": "Flights",
+    "amount_inr": 15972,
+    "note": "round trip, 2 traveller(s), Google Flights"
+   },
+   {
+    "label": "Hotel",
+    "amount_inr": 3343,
+    "note": "3 night(s) at Romaldo Guest-House, Google Hotels quote for 2 adult(s)"
+   },
+   {
+    "label": "Food, local transport & activities",
+    "amount_inr": 25552,
+    "note": "₹3,194 x 2 traveller(s) x 4 day(s)"
+   }
+  ],
+  "total_inr": 44867,
+  "budget_inr": null,
+  "within_budget": null,
+  "difference_inr": null,
+  "assumptions": [
+   "Chose a flight arriving at a sensible hour over one ₹180 cheaper that lands between midnight and 5 am.",
+   "Daily spend: ₹3,194/person/day (3,194 INR/person/day from Average daily price for a vacation in Goa based on the expenses of other visitors), 4 days.",
+   "Skipped 1 shared-room (hostel/dorm) listing(s) as unsuitable."
+  ],
+  "strict": false,
+  "flight": {
+   "summary": "Air India Express | BOM 2026-12-14 20:35 -> GOI 2026-12-14 22:00 | 1h25m, non-stop | ₹15,972 (round trip)",
+   "airlines": [
+    "Air India Express"
+   ],
+   "stops": 0,
+   "duration_min": 85,
+   "price_inr": 15972,
+   "price_covers": "round_trip",
+   "depart": "BOM 2026-12-14 20:35",
+   "arrive": "GOI 2026-12-14 22:00"
+  },
+  "hotel": {
+   "name": "Romaldo Guest-House",
+   "hotel_class": 2.0,
+   "rating": 3.8,
+   "reviews": 401,
+   "price_per_night_inr": 1114,
+   "total_price_inr": 3343,
+   "latitude": 15.5405638,
+   "longitude": 73.7580171,
+   "amenities": [
+    "Free Wi-Fi",
+    "Air conditioning",
+    "Beach access",
+    "Room service",
+    "Full-service laundry",
+    "Kid-friendly"
+   ],
+   "link": "https://romaldoguesthouse.in/",
+   "source": "google_hotels"
+  }
+ },
+ "other_flights": [
+  "IndiGo | BOM 2026-12-14 23:25 -> GOI 2026-12-15 00:40 | 1h15m, non-stop | ₹15,792 (round trip)",
+  "Air India Express | BOM 2026-12-14 17:45 -> GOI 2026-12-14 19:10 | 1h25m, non-stop | ₹16,392 (round trip)",
+  "Air India | BOM 2026-12-14 05:10 -> GOI 2026-12-14 06:20 | 1h10m, non-stop | ₹19,536 (round trip)"
+ ],
+ "weather": [
+  {
+   "day": "2026-12-14",
+   "temp_max_c": 32.7,
+   "temp_min_c": 18.5,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Partly cloudy",
+   "source": "last_year",
+   "label": "Mon 14 Dec 2026"
+  },
+  {
+   "day": "2026-12-15",
+   "temp_max_c": 33.1,
+   "temp_min_c": 18.5,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Clear sky",
+   "source": "last_year",
+   "label": "Tue 15 Dec 2026"
+  },
+  {
+   "day": "2026-12-16",
+   "temp_max_c": 33.5,
+   "temp_min_c": 19.5,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Partly cloudy",
+   "source": "last_year",
+   "label": "Wed 16 Dec 2026"
+  },
+  {
+   "day": "2026-12-17",
+   "temp_max_c": 34.5,
+   "temp_min_c": 23.1,
+   "precip_mm": 0.0,
+   "precip_prob_pct": null,
+   "condition": "Clear sky",
+   "source": "last_year",
+   "label": "Thu 17 Dec 2026"
+  }
+ ],
+ "brief": {
+  "summary": "A budget-friendly 3‑night getaway from Mumbai to Goa in mid‑December (Dec 14‑17) offers warm beach weather (28‑31°C) with almost no rain and calm seas, making it ideal for water sports and relaxed sightseeing.  The period falls in the early December window when crowds are lighter and hotel rates are 30‑40 % below peak, giving travellers good value for money.  As a domestic trip, no visa is required for Indian passport holders.",
+  "top_attractions": [],
+  "visa_info": "",
+  "local_tips": [
+   "Carry sunscreen and plenty of water for the hot beach afternoons.",
+   "Keep cash on hand; many beach shacks and small shops may not accept cards and UPI can be slow in crowded areas.",
+   "Respect church dress codes in Old Goa – shoulders and knees should be covered.",
+   "Only swim at beaches with lifeguard flags and avoid swimming after drinking."
+  ],
+  "daily_spend_per_person": 3194.0,
+  "daily_spend_currency": "INR",
+  "daily_spend_basis": "Average daily price for a vacation in Goa based on the expenses of other visitors",
+  "sources": [
+   "https://the-shooting-star.com/best-vegan-restaurants-in-goa",
+   "https://www.agoda.com/travel-guides/india/goa/goas-famous-veg-food-a-delicious-culinary-fiesta",
+   "https://www.sanskrutirestaurant.co.uk/manchester/a-guide-to-food-in-goa-india",
+   "https://www.mapquest.com/in/goa/regenta-inn-palacio-de-goa-527886170",
+   "https://www.weatherapi.com/",
+   "https://www.happyfares.in/blog/goa-december-travel-guide-india-2026",
+   "https://www.hirecab.net/blog/goa-december-2026-christmas-new-year-iffi-by-cab",
+   "https://vibrant.holiday/blog/goa-in-december-weather-crowds-costs-what-to-book-early"
+  ]
+ },
+ "itinerary": "### Day 1 — Monday, 14 Dec 2026\n\n- **Morning** – Arrive at Goa International Airport at 22:00. Transfer to Romaldo Guest‑House in Calangute and settle into your room.  \n- **Afternoon** – Rest and freshen up after the flight.  \n- **Evening** – Take a leisurely walk along Calangute Beach, enjoy the sunset, and grab a light vegetarian snack from a beach shack.  \n- **Practical tip** – Pack a reusable water bottle and a small towel for the beach; the evening breeze can be cool after the day’s heat.\n\n---\n\n### Day 2 — Tuesday, 15 Dec 2026\n\n- **Morning** – Head to Calangute Beach for water sports such as kayaking or paddle‑boarding (lifeguard flag present).  \n- **Afternoon** – Explore the nearby Calangute Market for souvenirs and local crafts; stop for a vegetarian lunch at a stall that offers fresh fruit juices and salads.  \n- **Evening** – Return to the hotel for a relaxed evening. Enjoy a vegetarian dinner at a local eatery that serves Goan vegetarian thali.  \n- **Practical tip** – Wear light, breathable clothing and apply sunscreen before heading out; reapply after water activities.\n\n---\n\n### Day 3 — Wednesday, 16 Dec 2026\n\n- **Morning** – Take a short trip to Old Goa (about 30 km). Visit the Basilica of Bom Jesus and Se Cathedral; remember to dress modestly (shoulders and knees covered).  \n- **Afternoon** – Return to Calangute and relax on the beach or by the hotel pool.  \n- **Evening** – Sample a vegetarian snack at a beach shack, such as coconut water and fresh fruit slices.  \n- **Practical tip** – Carry a small backpack with a hat, sunglasses, and a light jacket for the cooler church interiors.\n\n---\n\n### Day 4 — Thursday, 17 Dec 2026\n\n- **Morning** – Enjoy a final stroll along Calangute Beach, soak in the clear sky, and take a quick dip if the sea feels calm.  \n- **Afternoon** – Pack up, check out of Romaldo Guest‑House, and leave for Goa International Airport by early afternoon to catch your return flight.  \n- **Practical tip** – Leave the hotel by 12:30 pm to allow ample time for airport security and boarding, especially during peak travel hours.",
+ "critiques": [
+  {
+   "round": 1,
+   "approved": true,
+   "score": null,
+   "issues": []
+  }
+ ],
+ "errors": [
+  "critic: LLM review unavailable (LLMOutputError)"
+ ],
+ "llm_calls": 4,
+ "report_markdown": "# Goa trip plan\n\n**Route:** Mumbai → Goa (base: Calangute)  \n**Dates:** Mon 14 Dec 2026 → Thu 17 Dec 2026 (3 nights)  \n**Travellers:** 2 adults · **Style:** budget\n**Interests:** - · **Dietary:** vegetarian\n> Note: Based in Calangute, a popular area of Goa\n\n## Budget\n\n| Item | Amount | Notes |\n|---|---:|---|\n| Flights | ₹15,972 | round trip, 2 traveller(s), Google Flights |\n| Hotel | ₹3,343 | 3 night(s) at Romaldo Guest-House, Google Hotels quote for 2 adult(s) |\n| Food, local transport & activities | ₹25,552 | ₹3,194 x 2 traveller(s) x 4 day(s) |\n| **Total** | **₹44,867** | |\n\nAssumptions:\n- Chose a flight arriving at a sensible hour over one ₹180 cheaper that lands between midnight and 5 am.\n- Daily spend: ₹3,194/person/day (3,194 INR/person/day from Average daily price for a vacation in Goa based on the expenses of other visitors), 4 days.\n- Skipped 1 shared-room (hostel/dorm) listing(s) as unsuitable.\n\n## Flight\n\n**Selected:** Air India Express | BOM 2026-12-14 20:35 -> GOI 2026-12-14 22:00 | 1h25m, non-stop | ₹15,972 (round trip)\n\nOther options:\n- IndiGo | BOM 2026-12-14 23:25 -> GOI 2026-12-15 00:40 | 1h15m, non-stop | ₹15,792 (round trip)\n- Air India Express | BOM 2026-12-14 17:45 -> GOI 2026-12-14 19:10 | 1h25m, non-stop | ₹16,392 (round trip)\n- Air India | BOM 2026-12-14 05:10 -> GOI 2026-12-14 06:20 | 1h10m, non-stop | ₹19,536 (round trip)\n\n## Hotel\n\n**Selected:** Romaldo Guest-House | 2* | 3.8/5 (401 reviews) | ₹1,114/night\n[Hotel website](https://romaldoguesthouse.in/)\n\n## Typical weather (same dates last year)\n\n| Day | Conditions | Temp (°C) | Rain (mm) |\n|---|---|---|---|\n| Mon 14 Dec 2026 | Partly cloudy | 18.5 – 32.7 | 0.0 |\n| Tue 15 Dec 2026 | Clear sky | 18.5 – 33.1 | 0.0 |\n| Wed 16 Dec 2026 | Partly cloudy | 19.5 – 33.5 | 0.0 |\n| Thu 17 Dec 2026 | Clear sky | 23.1 – 34.5 | 0.0 |\n\n## Destination brief\n\nA budget-friendly 3‑night getaway from Mumbai to Goa in mid‑December (Dec 14‑17) offers warm beach weather (28‑31°C) with almost no rain and calm seas, making it ideal for water sports and relaxed sightseeing.  The period falls in the early December window when crowds are lighter and hotel rates are 30‑40 % below peak, giving travellers good value for money.  As a domestic trip, no visa is required for Indian passport holders.\n\n**Tips:**\n- Carry sunscreen and plenty of water for the hot beach afternoons.\n- Keep cash on hand; many beach shacks and small shops may not accept cards and UPI can be slow in crowded areas.\n- Respect church dress codes in Old Goa – shoulders and knees should be covered.\n- Only swim at beaches with lifeguard flags and avoid swimming after drinking.\n\n## Itinerary\n\n### Day 1 — Monday, 14 Dec 2026\n\n- **Morning** – Arrive at Goa International Airport at 22:00. Transfer to Romaldo Guest‑House in Calangute and settle into your room.  \n- **Afternoon** – Rest and freshen up after the flight.  \n- **Evening** – Take a leisurely walk along Calangute Beach, enjoy the sunset, and grab a light vegetarian snack from a beach shack.  \n- **Practical tip** – Pack a reusable water bottle and a small towel for the beach; the evening breeze can be cool after the day’s heat.\n\n---\n\n### Day 2 — Tuesday, 15 Dec 2026\n\n- **Morning** – Head to Calangute Beach for water sports such as kayaking or paddle‑boarding (lifeguard flag present).  \n- **Afternoon** – Explore the nearby Calangute Market for souvenirs and local crafts; stop for a vegetarian lunch at a stall that offers fresh fruit juices and salads.  \n- **Evening** – Return to the hotel for a relaxed evening. Enjoy a vegetarian dinner at a local eatery that serves Goan vegetarian thali.  \n- **Practical tip** – Wear light, breathable clothing and apply sunscreen before heading out; reapply after water activities.\n\n---\n\n### Day 3 — Wednesday, 16 Dec 2026\n\n- **Morning** – Take a short trip to Old Goa (about 30 km). Visit the Basilica of Bom Jesus and Se Cathedral; remember to dress modestly (shoulders and knees covered).  \n- **Afternoon** – Return to Calangute and relax on the beach or by the hotel pool.  \n- **Evening** – Sample a vegetarian snack at a beach shack, such as coconut water and fresh fruit slices.  \n- **Practical tip** – Carry a small backpack with a hat, sunglasses, and a light jacket for the cooler church interiors.\n\n---\n\n### Day 4 — Thursday, 17 Dec 2026\n\n- **Morning** – Enjoy a final stroll along Calangute Beach, soak in the clear sky, and take a quick dip if the sea feels calm.  \n- **Afternoon** – Pack up, check out of Romaldo Guest‑House, and leave for Goa International Airport by early afternoon to catch your return flight.  \n- **Practical tip** – Leave the hotel by 12:30 pm to allow ample time for airport security and boarding, especially during peak travel hours.\n\n## Quality review\n\n- **Review 1**: approved\n\n## Sources\n\n- https://the-shooting-star.com/best-vegan-restaurants-in-goa\n- https://www.agoda.com/travel-guides/india/goa/goas-famous-veg-food-a-delicious-culinary-fiesta\n- https://www.sanskrutirestaurant.co.uk/manchester/a-guide-to-food-in-goa-india\n- https://www.mapquest.com/in/goa/regenta-inn-palacio-de-goa-527886170\n- https://www.weatherapi.com/\n- https://www.happyfares.in/blog/goa-december-travel-guide-india-2026\n- https://www.hirecab.net/blog/goa-december-2026-christmas-new-year-iffi-by-cab\n- https://vibrant.holiday/blog/goa-in-december-weather-crowds-costs-what-to-book-early\n\n## Warnings\n\n- critic: LLM review unavailable (LLMOutputError)\n\n*Generated by Yatra AI · 4 LLM calls*\n",
+ "example_name": "goa",
+ "query": "4 days in Goa from Mumbai starting 14 Dec 2026, couple, budget trip, vegetarian",
+ "generated_on": "2026-11-14"
+}

@@ -1,0 +1,171 @@
+{
+ "thread_id": "example-bali-8e26b3",
+ "status": "planned",
+ "request": {
+  "origin_city": "Mumbai",
+  "origin_airport": "BOM",
+  "destination_city": "Bali",
+  "destination_airport": "DPS",
+  "destination_country": "ID",
+  "stay_area": "Seminyak",
+  "start_date": "2027-01-13",
+  "end_date": "2027-01-17",
+  "adults": 2,
+  "children": 0,
+  "budget_inr": 150000,
+  "style": "mid",
+  "interests": [
+   "beaches",
+   "temples"
+  ],
+  "dietary": [],
+  "passport_country": "IN",
+  "nights": 4,
+  "travellers": 2,
+  "stay_location": "Seminyak, Bali",
+  "is_domestic": false,
+  "start_label": "Wed 13 Jan 2027",
+  "end_label": "Sun 17 Jan 2027"
+ },
+ "assumptions": [
+  "Based in Seminyak, a popular area of Bali (name a different area to change it)."
+ ],
+ "budget": {
+  "lines": [
+   {
+    "label": "Flights",
+    "amount_inr": 82430,
+    "note": "round trip, 2 traveller(s), Google Flights"
+   },
+   {
+    "label": "Hotel",
+    "amount_inr": 9408,
+    "note": "4 night(s) at Metland Seva Seminyak, Google Hotels quote for 2 adult(s)"
+   },
+   {
+    "label": "Food, local transport & activities",
+    "amount_inr": 50000,
+    "note": "₹5,000 x 2 traveller(s) x 5 day(s)"
+   }
+  ],
+  "total_inr": 141838,
+  "budget_inr": 150000,
+  "within_budget": true,
+  "difference_inr": 8162,
+  "assumptions": [
+   "Daily spend: ₹5,000/person/day (default mid estimate (no grounded figure found)), 5 days."
+  ],
+  "strict": false,
+  "flight": {
+   "summary": "IndiGo | BOM 2027-01-13 06:10 -> DPS 2027-01-13 17:50 | 9h10m, 1 stop(s) | ₹82,430 (round trip)",
+   "airlines": [
+    "IndiGo"
+   ],
+   "stops": 1,
+   "duration_min": 550,
+   "price_inr": 82430,
+   "price_covers": "round_trip",
+   "depart": "BOM 2027-01-13 06:10",
+   "arrive": "DPS 2027-01-13 17:50"
+  },
+  "hotel": {
+   "name": "Metland Seva Seminyak",
+   "hotel_class": 4.0,
+   "rating": 4.6,
+   "reviews": 4799,
+   "price_per_night_inr": 2352,
+   "total_price_inr": 9408,
+   "latitude": -8.6965343,
+   "longitude": 115.1663954,
+   "amenities": [
+    "Breakfast ($)",
+    "Free Wi-Fi",
+    "Free parking",
+    "Outdoor pool",
+    "Hot tub",
+    "Air conditioning",
+    "Spa",
+    "Bar",
+    "Restaurant",
+    "Room service"
+   ],
+   "link": "https://metlandsevaseminyak.com/",
+   "source": "google_hotels"
+  }
+ },
+ "other_flights": [
+  "Malaysia Airlines | BOM 2027-01-13 23:45 -> DPS 2027-01-14 12:05 | 9h50m, 1 stop(s) | ₹1,15,510 (round trip)",
+  "Singapore Airlines | BOM 2027-01-13 23:35 -> DPS 2027-01-14 11:15 | 9h10m, 1 stop(s) | ₹1,25,642 (round trip)",
+  "IndiGo | BOM 2027-01-13 18:15 -> DPS 2027-01-14 10:35 | 13h50m, 1 stop(s) | ₹98,296 (round trip)"
+ ],
+ "weather": [
+  {
+   "day": "2027-01-13",
+   "temp_max_c": 30.0,
+   "temp_min_c": 24.0,
+   "precip_mm": 3.1,
+   "precip_prob_pct": null,
+   "condition": "Light rain",
+   "source": "last_year",
+   "label": "Wed 13 Jan 2027"
+  },
+  {
+   "day": "2027-01-14",
+   "temp_max_c": 29.4,
+   "temp_min_c": 24.9,
+   "precip_mm": 2.9,
+   "precip_prob_pct": null,
+   "condition": "Drizzle",
+   "source": "last_year",
+   "label": "Thu 14 Jan 2027"
+  },
+  {
+   "day": "2027-01-15",
+   "temp_max_c": 28.7,
+   "temp_min_c": 24.4,
+   "precip_mm": 16.9,
+   "precip_prob_pct": null,
+   "condition": "Rain",
+   "source": "last_year",
+   "label": "Fri 15 Jan 2027"
+  },
+  {
+   "day": "2027-01-16",
+   "temp_max_c": 30.2,
+   "temp_min_c": 23.4,
+   "precip_mm": 4.7,
+   "precip_prob_pct": null,
+   "condition": "Rain",
+   "source": "last_year",
+   "label": "Sat 16 Jan 2027"
+  },
+  {
+   "day": "2027-01-17",
+   "temp_max_c": 29.5,
+   "temp_min_c": 25.4,
+   "precip_mm": 4.8,
+   "precip_prob_pct": null,
+   "condition": "Light rain",
+   "source": "last_year",
+   "label": "Sun 17 Jan 2027"
+  }
+ ],
+ "brief": null,
+ "itinerary": "### Day 1 — Wednesday, 13 Jan 2027  \n**Morning**  \n- Depart Mumbai (BOM) at 06:10; enjoy the in‑flight meal and stretch before landing.  \n\n**Afternoon**  \n- Arrive Denpasar (DPS) at 17:50; clear immigration and collect luggage.  \n- Transfer to Metland Seva Seminyak; check‑in and settle into the room.  \n\n**Evening**  \n- Refresh with a shower, then take a brief walk around the hotel’s outdoor pool area (rain‑friendly).  \n- Dine at a nearby local warung or Balinese restaurant in Seminyak; try classic dishes such as nasi goreng or satay.  \n\n**Practical tip** – Keep a compact, waterproof umbrella and a light rain jacket in your day‑bag; the evening will still have light rain.\n\n---\n\n### Day 2 — Thursday, 14 Jan 2027  \n**Morning**  \n- Enjoy the complimentary breakfast at the hotel.  \n- Visit **Petitenget Temple** (a short walk from Seminyak) – the temple’s covered shrines are comfortable to explore even with drizzle.  \n\n**Afternoon**  \n- Join a Balinese cooking class in Seminyak; learn to prepare traditional dishes in a fully indoor kitchen.  \n- After the class, relax at the hotel’s hot tub or indoor lounge.  \n\n**Evening**  \n- Stroll along Seminyak Beach with a raincoat; the misty sea creates a romantic atmosphere.  \n- Choose a beachfront café for a light dinner, savoring fresh seafood while listening to the waves.  \n\n**Practical tip** – Wear quick‑dry clothing and waterproof sandals; they’ll keep you comfortable during temple visits and beach walks.\n\n---\n\n### Day 3 — Friday, 15 Jan 2027  \n**Morning**  \n- Breakfast at the hotel.  \n- Head to **Bali Museum** in Denpasar (approximately 30 min drive); explore indoor exhibits on Balinese history and art.  \n\n**Afternoon**  \n- Visit **Pura Maospahit**, a historic temple with covered pavilions, offering shelter from the rain while still providing a cultural experience.  \n- Return to Seminyak for a relaxing spa treatment (Balinese massage) at a reputable local spa.  \n\n**Evening**  \n- Enjoy dinner at a cozy indoor restaurant in Seminyak, sampling dishes like bebek betutu (slow‑cooked duck).  \n- If energy permits, attend a traditional Balinese dance performance at a nearby cultural venue.  \n\n**Practical tip** – Carry a waterproof bag for electronics and a spare set of dry clothes when moving between indoor sites.\n\n---\n\n### Day 4 — Saturday, 16 Jan 2027  \n**Morning**  \n- Breakfast at the hotel.  \n- Spend a leisurely morning at the hotel’s outdoor pool and hot tub; the rain adds a soothing ambience.  \n\n**Afternoon**  \n- Explore **Seminyak Square** and nearby boutique galleries; indoor shopping and art viewing are perfect for a rainy day.  \n- Stop by a local coffee shop for a refreshing iced kopi luwak or a warm cup of tea.  \n\n**Evening**  \n- Dine at a well‑reviewed Balinese restaurant in Seminyak, trying specialties such as ayam betutu (spiced chicken).  \n- End the night with a gentle walk along the illuminated streets of Seminyak, enjoying the gentle rain‑kissed lights.  \n\n**Practical tip** – Bring a reusable water bottle; staying hydrated is important even when the weather is cool and wet.\n\n---\n\n### Day 5 — Sunday, 17 Jan 2027  \n**Morning**  \n- Enjoy a final breakfast at the hotel.  \n- Take a short visit to **Pura Masceti**, a tranquil temple close to the hotel; the covered prayer hall offers a peaceful farewell.  \n\n**Afternoon**  \n- Check out of the hotel, store luggage at the front desk if needed.  \n- Depart for Denpasar Airport by early afternoon, allowing ample time for traffic and check‑in.  \n\n**Evening**  \n- (Travel) Board your return flight to Mumbai.  \n\n**Practical tip** – Confirm your airport transfer arrangement the night before and keep travel documents and a light raincoat easily accessible for a smooth departure.",
+ "critiques": [
+  {
+   "round": 1,
+   "approved": true,
+   "score": 8,
+   "issues": []
+  }
+ ],
+ "errors": [
+  "research: DestinationBrief: Unknown tool type: 'functions.DestinationBrief'. Available tools: DestinationBrief\nFor troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE "
+ ],
+ "llm_calls": 4,
+ "report_markdown": "# Bali trip plan\n\n**Route:** Mumbai → Bali (base: Seminyak)  \n**Dates:** Wed 13 Jan 2027 → Sun 17 Jan 2027 (4 nights)  \n**Travellers:** 2 adults · **Style:** mid\n**Interests:** beaches, temples · **Dietary:** -\n> Note: Based in Seminyak, a popular area of Bali (name a different area to change it).\n\n## Budget\n\n| Item | Amount | Notes |\n|---|---:|---|\n| Flights | ₹82,430 | round trip, 2 traveller(s), Google Flights |\n| Hotel | ₹9,408 | 4 night(s) at Metland Seva Seminyak, Google Hotels quote for 2 adult(s) |\n| Food, local transport & activities | ₹50,000 | ₹5,000 x 2 traveller(s) x 5 day(s) |\n| **Total** | **₹1,41,838** | |\n\nWithin your budget of ₹1,50,000, with ₹8,162 to spare.\n\nAssumptions:\n- Daily spend: ₹5,000/person/day (default mid estimate (no grounded figure found)), 5 days.\n\n## Flight\n\n**Selected:** IndiGo | BOM 2027-01-13 06:10 -> DPS 2027-01-13 17:50 | 9h10m, 1 stop(s) | ₹82,430 (round trip)\n\nOther options:\n- Malaysia Airlines | BOM 2027-01-13 23:45 -> DPS 2027-01-14 12:05 | 9h50m, 1 stop(s) | ₹1,15,510 (round trip)\n- Singapore Airlines | BOM 2027-01-13 23:35 -> DPS 2027-01-14 11:15 | 9h10m, 1 stop(s) | ₹1,25,642 (round trip)\n- IndiGo | BOM 2027-01-13 18:15 -> DPS 2027-01-14 10:35 | 13h50m, 1 stop(s) | ₹98,296 (round trip)\n\n## Hotel\n\n**Selected:** Metland Seva Seminyak | 4* | 4.6/5 (4799 reviews) | ₹2,352/night\n[Hotel website](https://metlandsevaseminyak.com/)\n\n## Typical weather (same dates last year)\n\n| Day | Conditions | Temp (°C) | Rain (mm) |\n|---|---|---|---|\n| Wed 13 Jan 2027 | Light rain | 24.0 – 30.0 | 3.1 |\n| Thu 14 Jan 2027 | Drizzle | 24.9 – 29.4 | 2.9 |\n| Fri 15 Jan 2027 | Rain | 24.4 – 28.7 | 16.9 |\n| Sat 16 Jan 2027 | Rain | 23.4 – 30.2 | 4.7 |\n| Sun 17 Jan 2027 | Light rain | 25.4 – 29.5 | 4.8 |\n\n## Itinerary\n\n### Day 1 — Wednesday, 13 Jan 2027  \n**Morning**  \n- Depart Mumbai (BOM) at 06:10; enjoy the in‑flight meal and stretch before landing.  \n\n**Afternoon**  \n- Arrive Denpasar (DPS) at 17:50; clear immigration and collect luggage.  \n- Transfer to Metland Seva Seminyak; check‑in and settle into the room.  \n\n**Evening**  \n- Refresh with a shower, then take a brief walk around the hotel’s outdoor pool area (rain‑friendly).  \n- Dine at a nearby local warung or Balinese restaurant in Seminyak; try classic dishes such as nasi goreng or satay.  \n\n**Practical tip** – Keep a compact, waterproof umbrella and a light rain jacket in your day‑bag; the evening will still have light rain.\n\n---\n\n### Day 2 — Thursday, 14 Jan 2027  \n**Morning**  \n- Enjoy the complimentary breakfast at the hotel.  \n- Visit **Petitenget Temple** (a short walk from Seminyak) – the temple’s covered shrines are comfortable to explore even with drizzle.  \n\n**Afternoon**  \n- Join a Balinese cooking class in Seminyak; learn to prepare traditional dishes in a fully indoor kitchen.  \n- After the class, relax at the hotel’s hot tub or indoor lounge.  \n\n**Evening**  \n- Stroll along Seminyak Beach with a raincoat; the misty sea creates a romantic atmosphere.  \n- Choose a beachfront café for a light dinner, savoring fresh seafood while listening to the waves.  \n\n**Practical tip** – Wear quick‑dry clothing and waterproof sandals; they’ll keep you comfortable during temple visits and beach walks.\n\n---\n\n### Day 3 — Friday, 15 Jan 2027  \n**Morning**  \n- Breakfast at the hotel.  \n- Head to **Bali Museum** in Denpasar (approximately 30 min drive); explore indoor exhibits on Balinese history and art.  \n\n**Afternoon**  \n- Visit **Pura Maospahit**, a historic temple with covered pavilions, offering shelter from the rain while still providing a cultural experience.  \n- Return to Seminyak for a relaxing spa treatment (Balinese massage) at a reputable local spa.  \n\n**Evening**  \n- Enjoy dinner at a cozy indoor restaurant in Seminyak, sampling dishes like bebek betutu (slow‑cooked duck).  \n- If energy permits, attend a traditional Balinese dance performance at a nearby cultural venue.  \n\n**Practical tip** – Carry a waterproof bag for electronics and a spare set of dry clothes when moving between indoor sites.\n\n---\n\n### Day 4 — Saturday, 16 Jan 2027  \n**Morning**  \n- Breakfast at the hotel.  \n- Spend a leisurely morning at the hotel’s outdoor pool and hot tub; the rain adds a soothing ambience.  \n\n**Afternoon**  \n- Explore **Seminyak Square** and nearby boutique galleries; indoor shopping and art viewing are perfect for a rainy day.  \n- Stop by a local coffee shop for a refreshing iced kopi luwak or a warm cup of tea.  \n\n**Evening**  \n- Dine at a well‑reviewed Balinese restaurant in Seminyak, trying specialties such as ayam betutu (spiced chicken).  \n- End the night with a gentle walk along the illuminated streets of Seminyak, enjoying the gentle rain‑kissed lights.  \n\n**Practical tip** – Bring a reusable water bottle; staying hydrated is important even when the weather is cool and wet.\n\n---\n\n### Day 5 — Sunday, 17 Jan 2027  \n**Morning**  \n- Enjoy a final breakfast at the hotel.  \n- Take a short visit to **Pura Masceti**, a tranquil temple close to the hotel; the covered prayer hall offers a peaceful farewell.  \n\n**Afternoon**  \n- Check out of the hotel, store luggage at the front desk if needed.  \n- Depart for Denpasar Airport by early afternoon, allowing ample time for traffic and check‑in.  \n\n**Evening**  \n- (Travel) Board your return flight to Mumbai.  \n\n**Practical tip** – Confirm your airport transfer arrangement the night before and keep travel documents and a light raincoat easily accessible for a smooth departure.\n\n## Quality review\n\n- **Review 1** · score 8/10: approved\n\n## Warnings\n\n- research: DestinationBrief: Unknown tool type: 'functions.DestinationBrief'. Available tools: DestinationBrief\nFor troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE \n\n*Generated by Yatra AI · 4 LLM calls*\n",
+ "example_name": "bali",
+ "query": "5 days in Bali from Mumbai from 13 Jan 2027, couple, under 1.5 lakh, love beaches and temples",
+ "generated_on": "2026-11-14"
+}

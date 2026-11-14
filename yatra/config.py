@@ -42,6 +42,10 @@ class Settings(BaseSettings):
     langfuse_secret_key: str = ""
     langfuse_host: str = "https://cloud.langfuse.com"
 
+    # ── Public demo limits (0 = unlimited; set them on the hosted app) ───────
+    public_daily_trip_limit: int = 0      # live trips per day, all visitors together
+    public_session_trip_limit: int = 0    # live trips per browser session
+
     # ── HTTP / caching ────────────────────────────────────────────────────────
     # Nominatim (OpenStreetMap) requires an identifying User-Agent.
     http_user_agent: str = "yatra-ai/0.1 (portfolio project)"

@@ -23,10 +23,9 @@ under ₹3L, vegetarian"*. Yatra AI then:
 ## Run the web app
 
 ```powershell
-python -m scripts.serve
+streamlit run streamlit_app.py          # Streamlit UI at http://localhost:8501 (the deployed app)
+python -m scripts.serve                 # alternative: FastAPI + SSE API with a plain web page at :8000
 ```
-Open http://127.0.0.1:8000, type a trip, and watch each agent appear on the route as it finishes.
-If details are missing, the question appears in the page. The plan streams in when done.
 
 ## Architecture
 
@@ -77,16 +76,19 @@ yatra/
   evals/                               evaluation cases loader, deterministic checks, LLM judge
   tracing.py                           optional Langfuse tracing
   api/                                 FastAPI app: SSE streaming, resume after questions, report, memory
-  web/index.html                       single-page UI (no build step, no CDN scripts)
+  web/index.html                       plain web page for the FastAPI app
+  usage.py, examples.py                public-demo limits and saved example plans
   graph/                               state, intent, agents, synthesis, critic loop, memory, builder
+streamlit_app.py                       the Streamlit web app (deployed)
 scripts/
-  serve.py                             start the web app
+  serve.py                             start the FastAPI app
+  make_examples.py                     generate the example plans shown in the app
   evaluate.py                          run the evaluation suite and write a report
   compare_evals.py                     compare two evaluation runs (baseline vs new)
   plan.py                              plan a trip from the terminal
   smoke_test.py                        live check of every external dependency
 evals/cases.json                       30 test trips (dates relative to today, never stale)
-tests/                                 87 offline tests: eval metrics, API streaming, graph runs with interrupt/resume, critic loop, memory
+tests/                                 92 offline tests: eval metrics, API streaming, graph runs with interrupt/resume, critic loop, memory
 ```
 
 ## Evaluation
@@ -151,6 +153,29 @@ Caveats:
 Set `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` in `.env` (free at cloud.langfuse.com). Every run from the CLI,
 the web app or the evaluator is then traced: each agent, LLM call, prompt, token count and latency, grouped by session
 and user. Without keys, tracing is off and nothing changes.
+
+## Deploy (free: Streamlit Community Cloud + Neon Postgres)
+
+The public demo protects the free API quotas: `PUBLIC_DAILY_TRIP_LIMIT` caps live trips per day across
+all visitors, `PUBLIC_SESSION_TRIP_LIMIT` caps them per visit, and the **Example plans** tab always works.
+Visitors who give no name are anonymous and nothing is stored about them.
+
+1. **Database.** Create a free project at neon.com and copy its connection string. Turn **off**
+   "Connection pooling" so you get the direct connection string, which should end in `?sslmode=require`.
+2. **Example plans.** Run `python -m scripts.make_examples` locally (uses about 4 trips of quota),
+   then commit the `examples/` folder.
+3. **Push** the repository to GitHub.
+4. **Deploy.** At share.streamlit.io, sign in with GitHub, then choose **Create app** and pick this repo,
+   branch `main`, file `streamlit_app.py`. Under **Advanced settings**, choose Python 3.11 and paste the secrets:
+   ```toml
+   GROQ_API_KEY = "..."
+   SERPAPI_API_KEY = "..."
+   TAVILY_API_KEY = "..."
+   DATABASE_URL = "postgresql://...neon.tech/neondb?sslmode=require"
+   PUBLIC_DAILY_TRIP_LIMIT = 10
+   PUBLIC_SESSION_TRIP_LIMIT = 2
+   ```
+   Then click **Deploy**. Streamlit Cloud apps sleep after 12 hours without visitors and wake when someone opens the link.
 
 ## Setup (Windows PowerShell)
 

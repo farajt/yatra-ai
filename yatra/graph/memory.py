@@ -18,6 +18,11 @@ log = logging.getLogger(__name__)
 NAMESPACE = "users"
 PROFILE_KEY = "profile"
 DEFAULT_USER = "guest"
+ANONYMOUS_PREFIX = "visitor-"   # web visitors who gave no name: never stored
+
+
+def is_anonymous(user_id: str | None) -> bool:
+    return bool(user_id) and user_id.startswith(ANONYMOUS_PREFIX)
 
 
 def _ns(user_id: str) -> tuple[str, str]:
@@ -25,7 +30,7 @@ def _ns(user_id: str) -> tuple[str, str]:
 
 
 def get_profile(store: BaseStore | None, user_id: str) -> UserProfile:
-    if store is None:
+    if store is None or is_anonymous(user_id):
         return UserProfile()
     item = store.get(_ns(user_id), PROFILE_KEY)
     if item is None:
@@ -88,9 +93,9 @@ def load_profile(state: dict, *, store: BaseStore | None = None) -> dict:
 
 def save_profile(state: dict, *, store: BaseStore | None = None) -> dict:
     stated = state.get("stated") or {}
-    if store is None or state.get("status") != "planned":
-        return {}
     user_id = state.get("user_id", DEFAULT_USER)
+    if store is None or state.get("status") != "planned" or is_anonymous(user_id):
+        return {}
     try:
         updated = merge_learned(get_profile(store, user_id), stated)
         put_profile(store, user_id, updated)
