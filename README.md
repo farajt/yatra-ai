@@ -109,7 +109,42 @@ session and user. Every metric is computed by deterministic, unit-tested Python 
 
 `--judge` adds an optional LLM-as-judge score. It is treated as a secondary signal.
 
-<!-- Paste the metric table from your latest eval_results/<run>/report.md here -->
+### Results
+
+**Full suite, 30 trips** (run `20261113_160522`):
+
+| Metric | Result |
+|---|---|
+| Trips completed (no crashes) | 100% |
+| Request fields extracted correctly | 96.1% |
+| Asked a follow-up question exactly when needed | 90.0% |
+| Budget handled honestly (within budget, or re-planned and the overrun flagged) | **100%** |
+| Itinerary has one section per day / no invented prices | **100% / 100%** |
+| Critic approval: first draft vs after self-correction | **34.5% vs 89.7%** |
+| Average review rounds / LLM calls / tokens per plan | 1.9 / 6.1 / ~15k |
+
+**Before vs after fixes, on the same 11 trips** (runs `20261113_160522` and `20261114_095543`,
+compared with `scripts/compare_evals.py --before-legacy-only`):
+
+| Metric | Before | After |
+|---|---|---|
+| Real flight found | 72.7% | **100%** |
+| Plans with no repeated places | 72.7% | **90.9%** |
+| Critic approval, first pass | 45.5% | 54.5% |
+| Critic approval, final | 81.8% | **100%** |
+| Request understood correctly (all fields) | 90.9% | 90.9% (one trip fixed, one regressed on run-to-run variance) |
+
+The fixes behind the gains were found by this suite:
+- a rule-based parser for Indian budget notation ("3L", "2.5 lakh", "50k")
+- a known-airports table
+- a place-name safety net for sentences like "from Chennai from 17 Jan"
+- computing trip length in Python instead of trusting the model's arithmetic
+
+Caveats:
+- 11 trips is a small sample, so one trip moves a percentage by about 9 points.
+- LLM outputs vary between runs.
+- Latency mostly reflects Groq free-tier throttling.
+- Groq's free daily token cap limits a full run to about 13 trips per day. The evaluator stops cleanly and resumes with `--resume`.
 
 ## Tracing
 
