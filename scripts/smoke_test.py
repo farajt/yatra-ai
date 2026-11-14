@@ -40,7 +40,8 @@ def main() -> int:
     start = date.today() + timedelta(days=30)
     end = start + timedelta(days=5)
 
-    check("database", lambda: (check_db(), "PostgreSQL reachable")[1])
+    from yatra.db import describe_backend
+    check("database", lambda: (check_db(), f"{describe_backend()} ready")[1])
     check("llm", lambda: get_llm(fast=True).invoke("Reply with exactly: OK").content.strip()[:40])
 
     tokyo = {}

@@ -70,6 +70,6 @@ def build_graph(checkpointer: Checkpointer = None, store: BaseStore | None = Non
 
 @lru_cache
 def get_app():
-    """The production graph: sessions checkpointed and user profiles stored in PostgreSQL."""
+    """The production graph: sessions checkpointed and user profiles stored (SQLite by default)."""
     from yatra.db import get_checkpointer, get_store
     return build_graph(get_checkpointer(), get_store())

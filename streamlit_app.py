@@ -5,7 +5,7 @@
 
 The app runs the same LangGraph planner as the CLI and API. It streams each agent's progress,
 asks follow-up questions in the page (the graph pauses with interrupt() and resumes from the
-Postgres checkpoint), and protects the free API quotas with daily and per-visit limits.
+saved checkpoint), and protects the free API quotas with daily and per-visit limits.
 """
 import os
 
@@ -350,6 +350,6 @@ with tab_how:
 7. The **critic** checks the plan with fixed rules and an AI review. Real problems are sent back
    for a targeted repair, at most twice.
 
-Built with LangGraph, Groq (gpt-oss), PostgreSQL and Streamlit, and measured with a 30-trip
+Built with LangGraph, Groq (gpt-oss), SQLite and Streamlit, and measured with a 30-trip
 evaluation suite. Details and results are in the [README on GitHub]({repo}).
 """.replace("{repo}", REPO_URL))

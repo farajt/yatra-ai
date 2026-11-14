@@ -39,7 +39,8 @@ class Settings(BaseSettings):
     tavily_api_key: str = ""    # destination research
 
     # ── Database ──────────────────────────────────────────────────────────────
-    database_url: str = ""      # postgresql://user:pass@localhost:5432/langgraph_memory
+    database_url: str = ""      # optional PostgreSQL URL; empty = use the SQLite file below
+    sqlite_path: Path = PROJECT_ROOT / ".data" / "yatra.db"
 
     # ── Tracing (optional) ────────────────────────────────────────────────────
     langfuse_public_key: str = ""

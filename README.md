@@ -59,7 +59,7 @@ and the results are in `eval_results/`.
 
 ## Run it on your computer
 
-You need Python 3.11, PostgreSQL, and free API keys from
+You need Python 3.11 and free API keys from
 [Groq](https://console.groq.com/keys), [SerpApi](https://serpapi.com) and [Tavily](https://app.tavily.com).
 
 ```powershell
@@ -69,7 +69,7 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 copy .env.example .env        # then add your keys and database URL to .env
-pytest                        # 94 tests, no API calls
+pytest                        # 96 tests, no API calls
 streamlit run streamlit_app.py
 ```
 
@@ -77,11 +77,13 @@ You can also plan from the terminal: `python -m scripts.plan "4 days in Goa from
 
 ## Deploy it for free
 
-1. Create a free Postgres database on [Neon](https://neon.com). Turn off connection pooling and copy the connection string.
-2. Make the example plans: `python -m scripts.make_examples`, then commit the `examples/` folder.
-3. On [Streamlit Community Cloud](https://share.streamlit.io), create an app from this repo with `streamlit_app.py`.
-   In the secrets box, add your three API keys, `DATABASE_URL`, and limits such as
+1. Make the example plans: `python -m scripts.make_examples`, then commit the `examples/` folder.
+2. On [Streamlit Community Cloud](https://share.streamlit.io), create an app from this repo with `streamlit_app.py`.
+   In the secrets box, add your three API keys and limits such as
    `PUBLIC_DAILY_TRIP_LIMIT = 10` and `PUBLIC_SESSION_TRIP_LIMIT = 2`.
+
+No database setup is needed: the app keeps its data in a small SQLite file. On Streamlit Cloud that file
+resets when the app restarts, so saved preferences don't last forever there.
 
 The limits are there because the free API plans only cover a handful of trips a day. When they run out,
 visitors can still browse the example plans.
@@ -92,13 +94,13 @@ visitors can still browse the example plans.
 streamlit_app.py     the web app
 yatra/               the planner: agents, graph, budget, tools, memory
 scripts/             run from the terminal: plan, evaluate, compare runs, make examples
-tests/               94 tests that run without any API calls
+tests/               96 tests that run without any API calls
 evals/cases.json     the 30 test trips
 ```
 
 ## Built with
 
-LangGraph, Groq (gpt-oss models), PostgreSQL, Streamlit, FastAPI, SerpApi, Tavily, Open-Meteo,
+LangGraph, Groq (gpt-oss models), SQLite, Streamlit, FastAPI, SerpApi, Tavily, Open-Meteo,
 OpenStreetMap, and Langfuse for optional tracing.
 
 ## Limitations

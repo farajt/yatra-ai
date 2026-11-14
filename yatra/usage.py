@@ -4,7 +4,7 @@ Free tiers allow roughly 13 plans/day (Groq) and 125/month (SerpApi) in total, s
 deployment caps live planning:
   * PUBLIC_DAILY_TRIP_LIMIT   - live trips per day across all visitors (0 = unlimited)
   * PUBLIC_SESSION_TRIP_LIMIT - live trips per browser session (0 = unlimited)
-The daily counter lives in the LangGraph Store (Postgres), so it survives restarts.
+The daily counter lives in the LangGraph Store (SQLite by default).
 """
 from datetime import datetime, timezone
 

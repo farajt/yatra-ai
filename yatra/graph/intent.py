@@ -2,7 +2,7 @@
 
 parse_intent: free text -> TripExtraction (LLM, structured output) -> validated TripRequest (Python).
 clarify:      if required fields are missing, pause the graph with interrupt() and ask the user.
-              The graph state is checkpointed in Postgres, so the run resumes exactly where it stopped.
+              The graph state is checkpointed, so the run resumes exactly where it stopped.
 """
 import logging
 import re
